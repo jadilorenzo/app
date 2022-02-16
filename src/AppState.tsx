@@ -18,6 +18,8 @@ export const AppStateProvider = ({children}: {
         })
     }
 
+    console.log(state)
+
     return (
         <AppState.Provider value={{get, set}}>
             {children}

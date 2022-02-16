@@ -3,7 +3,6 @@ import { AppState } from './AppState'
 
 const useAppState = () => {
     const state = useContext(AppState)
-    console.log(state)
     return state
 }
 
