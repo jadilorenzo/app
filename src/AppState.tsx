@@ -6,9 +6,20 @@ export const AppState = createContext<any>({})
 export const AppStateProvider = ({children}: {
     children: React.ReactNode
 }) => {
-    const [state, setState] = useState({})
+    const [state, setState] = useState<any>({})
+
+    const get = (value: string) => {
+        return state[value]
+    }
+
+    const set = (v: string, value: any) => {
+        setState((s: any) => {
+            return {...s, [v]: value}
+        })
+    }
+
     return (
-        <AppState.Provider value={{state, setState}}>
+        <AppState.Provider value={{get, set}}>
             {children}
         </AppState.Provider>
     )
