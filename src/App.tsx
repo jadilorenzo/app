@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React from 'react'
+import Apps from './apps'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { AppStateProvider } from './AppState'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <AppStateProvider>
+                <Routes>
+                    <Route path='/' element={
+                        <>
+                            <div>Hello World</div>
+                            <br/>
+                            {Object.keys(Apps).map((key) => (
+                                <div key={key}><Link to={`/apps/${key}`}>{key}</Link></div>
+                            ))}
+                        </>
+                    }/>
+                    {Object.keys(Apps).map((key: string) => {
+                        const A : React.FC = Apps[key]
+                        return (
+                            <Route key={key} path={`/apps/${key}`} element={<A/>}/>
+                        )
+                    })}
+                </Routes>
+            </AppStateProvider>
+        </BrowserRouter>
+    )
 }
 
-export default App;
+export default App
