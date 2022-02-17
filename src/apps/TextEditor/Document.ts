@@ -14,6 +14,10 @@ const insert = (arr: unknown[], index: number, newItem: string) => [
     ...arr.slice(index),
 ]
 
+const remove = (arr: unknown[], index: number) => [
+    ...arr.slice(0, index),
+    ...arr.slice(index+1),
+]
 
 class Document {
     document: Paragraph[]
@@ -88,12 +92,10 @@ class Document {
     
     delete(): this {
         this._getLocation()
-        this.document[this.paragraphIndex].content = this.document[
-            this.paragraphIndex
-        ].content
-            .split('')
-            .splice(this.locationInParagraph, 1)
-            .join('')
+        this.document[this.paragraphIndex].content = remove(
+            this.document[this.paragraphIndex].content.split(''),
+            this.locationInParagraph - 1 // no idea why -1 works
+        ).join('')
         this.allText = this.document.map((p) => p.content).join('')
         this.location = this.location - 1
 

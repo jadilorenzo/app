@@ -43,12 +43,19 @@ describe('Document', () => {
         ).toBe('abc')
     })
 
-    test('handles deleting single characters', () => {
+    test('handles deleting single character', () => {
         const doc = new Document()
         expect(
             doc
                 .keyStroke('a')
                 .delete().allText
         ).toBe('')
+    })
+
+    test('handles deleting many characters', () => {
+        const doc = new Document()
+        expect(
+            doc.keyStroke('a').keyStroke('b').keyStroke('c').delete().allText
+        ).toBe('ab')
     })
 })
