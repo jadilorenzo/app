@@ -20,7 +20,7 @@ describe('Document', () => {
         ).toBe('ab')
     })
 
-    test('handles moving cursor', () => {
+    test('moves cursor', () => {
         const doc = new Document()
         expect(
             doc
@@ -30,7 +30,7 @@ describe('Document', () => {
         ).toBe(1)
     })
 
-    test('handles inserting with moved cursor', () => {
+    test('inserts with moved cursor', () => {
         const doc = new Document()
         expect(
             doc
@@ -43,7 +43,7 @@ describe('Document', () => {
         ).toBe('abc')
     })
 
-    test('handles deleting single character', () => {
+    test('deletes single characters', () => {
         const doc = new Document()
         expect(
             doc
@@ -52,14 +52,14 @@ describe('Document', () => {
         ).toBe('')
     })
 
-    test('handles deleting many characters', () => {
+    test('deletes many characters', () => {
         const doc = new Document()
         expect(
             doc.keyStroke('a').keyStroke('b').keyStroke('c').delete().allText
         ).toBe('ab')
     })
 
-    test('handles deleting selection', () => {
+    test('deletes selection', () => {
         const doc = new Document()
         expect(
             doc
@@ -70,5 +70,24 @@ describe('Document', () => {
                 .select(1, 2)
                 .delete().allText
         ).toBe('ad')
+    })
+
+    test('creates new line', () => {
+        const doc = new Document()
+        expect(
+            doc.keyStroke('a').keyStroke('b').newLine().document[1].newLine
+        ).toBe(true)
+    })
+    
+    test('creates new line in the middle of text', () => {
+        const doc = new Document()
+        expect(doc.keyStroke('a').keyStroke('b').cursorLeft().newLine().document).toHaveLength(3)
+    })
+
+    test('carries style after new paragraph', () => {
+        const doc = new Document()
+        expect(
+            doc.keyStroke('a').style('bold').keyStroke('b').cursorLeft().newLine().document[2].style
+        ).toBe('bold')
     })
 })

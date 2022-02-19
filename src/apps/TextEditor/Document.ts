@@ -1,6 +1,8 @@
+type Style = 'bold' | 'italics' | 'underlined' | 'strikethrough' | 'custom' | 'none'
+
 interface Paragraph {
     type: 'text' | 'image'
-    style?: 'bold' | 'italics' | 'underlined' | 'strikethrough' | 'custom' | 'none' | undefined
+    style?: Style
     styleCSS?: string
     content: string
     newLine?: boolean
@@ -8,7 +10,7 @@ interface Paragraph {
 
 type Selection = [number, number]
 
-const insert = (arr: unknown[], index: number, newItem: string) => [
+const insert = (arr: unknown[], index: number, newItem: unknown) => [
     ...arr.slice(0, index),
     newItem,
     ...arr.slice(index),
@@ -99,6 +101,39 @@ class Document {
 
         return this
     }
+
+    newLine(): this {
+        this._getLocation()
+        if (this.locationInParagraph !== this.document[this.paragraphIndex].content.length) {
+            // Split paragraph
+            this.document = insert(this.document, this.paragraphIndex + 1, {
+                ...this.document[this.paragraphIndex],
+                content: this.document[this.paragraphIndex].content
+                    .split('')
+                    .slice(this.locationInParagraph)
+                    .join('')
+            } as Paragraph) as Paragraph[]
+
+            this.document[this.paragraphIndex].content = this.document[
+                this.paragraphIndex
+            ].content
+                .split('')
+                .slice(0, this.locationInParagraph)
+                .join('')        
+        }
+
+        this.document = insert(this.document, this.paragraphIndex + 1, {
+            type: 'text',
+            content: '',
+            newLine: true,
+        } as Paragraph) as Paragraph[]
+        return this
+    }
+
+    style(style: Style): this {
+        this.document[this.paragraphIndex].style = style 
+        return this
+    }
     
     delete(): this {
         this._getLocation()
@@ -111,7 +146,7 @@ class Document {
         } else {
             this.document[this.paragraphIndex].content = remove(
                 this.document[this.paragraphIndex].content.split(''),
-                this.locationInParagraph - 1 // no idea why -1 works
+                this.locationInParagraph - 1
             ).join('')
         }
         this.allText = this.document.map((p) => p.content).join('')
