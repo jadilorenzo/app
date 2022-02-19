@@ -82,7 +82,7 @@ class Document {
         return this
     }
 
-    select(start, end): this {
+    select(start: number, end: number): this {
         this.selection = [start, end]
         return this
     }
