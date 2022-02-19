@@ -58,4 +58,17 @@ describe('Document', () => {
             doc.keyStroke('a').keyStroke('b').keyStroke('c').delete().allText
         ).toBe('ab')
     })
+
+    test('handles deleting selection', () => {
+        const doc = new Document()
+        expect(
+            doc
+                .keyStroke('a')
+                .keyStroke('b')
+                .keyStroke('c')
+                .keyStroke('d')
+                .select(1, 2)
+                .delete().allText
+        ).toBe('ad')
+    })
 })

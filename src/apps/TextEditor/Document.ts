@@ -19,6 +19,11 @@ const remove = (arr: unknown[], index: number) => [
     ...arr.slice(index+1),
 ]
 
+const removeRange = (arr: unknown[], startIndex: number, endIndex: number) => [
+    ...arr.slice(0, startIndex),
+    ...arr.slice(endIndex + 1),
+]
+
 class Document {
     document: Paragraph[]
     location: number
@@ -77,6 +82,11 @@ class Document {
         return this
     }
 
+    select(start, end): this {
+        this.selection = [start, end]
+        return this
+    }
+
     keyStroke(key: string): this {
         this._getLocation()
         this.document[this.paragraphIndex].content = insert(
@@ -92,10 +102,18 @@ class Document {
     
     delete(): this {
         this._getLocation()
-        this.document[this.paragraphIndex].content = remove(
-            this.document[this.paragraphIndex].content.split(''),
-            this.locationInParagraph - 1 // no idea why -1 works
-        ).join('')
+        if (this.selection) {
+            this.document[this.paragraphIndex].content = removeRange(
+                this.document[this.paragraphIndex].content.split(''),
+                this.selection[0],
+                this.selection[1]
+            ).join('')
+        } else {
+            this.document[this.paragraphIndex].content = remove(
+                this.document[this.paragraphIndex].content.split(''),
+                this.locationInParagraph - 1 // no idea why -1 works
+            ).join('')
+        }
         this.allText = this.document.map((p) => p.content).join('')
         this.location = this.location - 1
 
