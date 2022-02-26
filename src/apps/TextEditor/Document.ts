@@ -166,7 +166,7 @@ class Document {
         return this
     }
 
-    style(style: Style): this {
+    style(style: Style, styleCSS?: string): this {
         this._getLocation()
 
         if ((this.locationInParagraph < this.document[this.paragraphIndex].content.length) || this.selection) {
@@ -190,6 +190,7 @@ class Document {
             this.document = insert(this.document, this.paragraphIndex + 1, {
                 ...this.document[this.paragraphIndex],
                 style,
+                ...(styleCSS ? {styleCSS: styleCSS}: {}),
                 content: currentContent.slice(
                     this.selection[0],
                     this.selection[1]
@@ -227,4 +228,4 @@ class Document {
 }
 
 export default Document
-// ✓✓✓✓✓✓✓✓✓✓✓✓✓
+// ✓✓✓✓✓✓✓✓✓✓✓✓✓✓

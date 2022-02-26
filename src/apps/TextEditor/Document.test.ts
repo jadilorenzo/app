@@ -153,10 +153,24 @@ describe('Document', () => {
             .keyStroke(' ')
             .keyStroke('h')
             .keyStroke('i')
-            .select(3,3)
+            .select(3, 3)
             .keyStroke('d')
+            .select(6, 6)
+            .keyStroke('g')
 
-        expect(newDoc.allText).toBe('abcdef hi')
+        expect(newDoc.allText).toBe('abcdefghi')
         expect(newDoc.selection).toBeUndefined()
+    })
+
+    test('applys styleCSS', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .select(1,1)
+            .style('custom', 'color: blue;')
+
+        expect(newDoc.document[1].styleCSS).toBe('color: blue;')
     })
 })
