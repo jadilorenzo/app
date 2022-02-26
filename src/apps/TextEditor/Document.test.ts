@@ -74,20 +74,48 @@ describe('Document', () => {
 
     test('creates new line', () => {
         const doc = new Document()
-        expect(
-            doc.keyStroke('a').keyStroke('b').newLine().document[1].newLine
-        ).toBe(true)
-    })
-    
-    test('creates new line in the middle of text', () => {
-        const doc = new Document()
-        expect(doc.keyStroke('a').keyStroke('b').cursorLeft().newLine().document).toHaveLength(3)
+        const newDoc = doc.keyStroke('a').keyStroke('b').cursorLeft().newLine()
+        expect(newDoc.document[0].content).toBe('a')
+        expect(newDoc.document[1].newLine).toBe(true)
+        expect(newDoc.document[2].content).toBe('b')
+        expect(newDoc.document).toHaveLength(3)
     })
 
     test('carries style after new paragraph', () => {
         const doc = new Document()
-        expect(
-            doc.keyStroke('a').style('bold').keyStroke('b').cursorLeft().newLine().document[2].style
-        ).toBe('bold')
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .style('bold')
+            .cursorLeft()
+            .newLine()
+
+        expect(newDoc.document[0].style).toBe('bold')
+        expect(newDoc.document[2].style).toBe('bold')
+    })
+
+    test('style splits paragraph', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .keyStroke(' ')
+            .keyStroke('e')
+            .keyStroke('f')
+            .keyStroke(' ')
+            .keyStroke('h')
+            .keyStroke('i')
+            .cursorLeft()
+            .cursorLeft()
+            .cursorLeft()
+            .cursorLeft()
+            .style('bold')
+
+        expect(newDoc.document).toHaveLength(3)
+        expect(newDoc.document[2].style).toBe('none')
+        expect(newDoc.document[1].content).toBe('ef')
+        expect(newDoc.allText).toBe('abc ef hi')
+        expect(newDoc.document[1].style).toBe('bold')
     })
 })

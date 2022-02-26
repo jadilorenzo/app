@@ -26,6 +26,24 @@ const removeRange = (arr: unknown[], startIndex: number, endIndex: number) => [
     ...arr.slice(endIndex + 1),
 ]
 
+const getWordRangeFromIndex = (content: string, index: number) => {
+    const contentWords = content.split(' ')
+    let startIndex = 0
+    let wordIndex = 0
+    for (const word of contentWords) {
+        if (startIndex + word.length + 1 <= index) {
+            startIndex = startIndex + word.length + 1
+            wordIndex = wordIndex + 1
+        } else {
+            break
+        }
+    }
+
+    const endIndex = startIndex + contentWords[wordIndex].length
+
+    return [startIndex, endIndex] as Selection
+}
+
 class Document {
     document: Paragraph[]
     location: number
@@ -71,6 +89,7 @@ class Document {
     }
 
     cursorLeft(): this {
+        this._getLocation()
         if (this.location !== 0) {
             this.location = this.location - 1
         }
@@ -78,6 +97,7 @@ class Document {
     }
 
     cursorRight(): this {
+        this._getLocation()
         if (this.location !== this.allText.length) {
             this.location = this.location + 1
         }
@@ -104,34 +124,72 @@ class Document {
 
     newLine(): this {
         this._getLocation()
-        if (this.locationInParagraph !== this.document[this.paragraphIndex].content.length) {
-            // Split paragraph
-            this.document = insert(this.document, this.paragraphIndex + 1, {
-                ...this.document[this.paragraphIndex],
-                content: this.document[this.paragraphIndex].content
-                    .split('')
-                    .slice(this.locationInParagraph)
-                    .join('')
-            } as Paragraph) as Paragraph[]
+        if (this.locationInParagraph <= this.document[this.paragraphIndex].content.length) {
+            // set text of first paragraph to the first half of the original content
+            this.document = insert(
+                this.document,
+                this.paragraphIndex - 1,
+                {
+                    ...this.document[this.paragraphIndex],
+                    content: this.document[this.paragraphIndex].content.slice(0, this.locationInParagraph)
+                }
+            ) as Paragraph[]
 
-            this.document[this.paragraphIndex].content = this.document[
-                this.paragraphIndex
-            ].content
-                .split('')
-                .slice(0, this.locationInParagraph)
-                .join('')        
+            // set text of last paragraph to the last half of the original content
+            this.document[this.paragraphIndex+1].content = this.document[this.paragraphIndex+1].content.slice(this.locationInParagraph)
+
+            // add newline in between paragraphs
+            this.document = insert(
+                this.document, 
+                this.paragraphIndex + 1, 
+                {
+                    type: 'text',
+                    content: '',
+                    style: 'none',
+                    newLine: true
+                }
+            ) as Paragraph[]
         }
 
-        this.document = insert(this.document, this.paragraphIndex + 1, {
-            type: 'text',
-            content: '',
-            newLine: true,
-        } as Paragraph) as Paragraph[]
         return this
     }
 
     style(style: Style): this {
-        this.document[this.paragraphIndex].style = style 
+        this._getLocation()
+
+        if (this.locationInParagraph < this.document[this.paragraphIndex].content.length) {
+            this.selection = getWordRangeFromIndex(this.document[this.paragraphIndex].content, this.locationInParagraph)
+            const currentContent = this.document[this.paragraphIndex].content 
+
+            // set text of first paragraph to the first section of the original content
+            this.document = insert(this.document, this.paragraphIndex - 1, {
+                ...this.document[this.paragraphIndex],
+                content: currentContent.slice(
+                    0,
+                    this.selection[0]
+                ),
+            }) as Paragraph[]
+
+            // set text of last paragraph to the last section of the original content
+            this.document[this.paragraphIndex + 1].content =
+              currentContent.slice(this.selection[1])
+
+            // add newline in between paragraphs with middle section of text
+            this.document = insert(this.document, this.paragraphIndex + 1, {
+                ...this.document[this.paragraphIndex],
+                style,
+                content: currentContent.slice(
+                    this.selection[0],
+                    this.selection[1]
+                ),
+            }) as Paragraph[]
+
+            this.selection = undefined
+            this.allText = this.document.map((p) => p.content).join('')
+        } else {
+            this.document[this.paragraphIndex].style = style
+        }
+        
         return this
     }
     
@@ -157,3 +215,4 @@ class Document {
 }
 
 export default Document
+// ✓✓✓✓✓✓✓✓✓✓✓✓
