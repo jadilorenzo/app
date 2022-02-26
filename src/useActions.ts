@@ -35,6 +35,15 @@ const useActions = () => {
                 (get('TEXT_EDITOR_DOCUMENT') as Document).cursorRight()
             )
             break
+        case 'TEXT_EDITOR_DOCUMENT_SET_CURSOR': {
+            const doc = get('TEXT_EDITOR_DOCUMENT') as Document
+            doc.location = data as number
+            doc._getLocation()
+            return set(
+                'TEXT_EDITOR_DOCUMENT',
+                doc
+            )
+        }
 
         default:
             throw new Error('Act key does not exist.')
