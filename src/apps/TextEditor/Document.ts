@@ -111,13 +111,25 @@ class Document {
 
     keyStroke(key: string): this {
         this._getLocation()
-        this.document[this.paragraphIndex].content = insert(
-            this.document[this.paragraphIndex].content.split(''),
-            this.locationInParagraph,
-            key
-        ).join('')
+        if (!this.selection) {
+            this.document[this.paragraphIndex].content = insert(
+                this.document[this.paragraphIndex].content.split(''),
+                this.locationInParagraph,
+                key
+            ).join('')
+        } else {
+            const selection = this.selection
+            this.delete()
+            this.document[this.paragraphIndex].content = insert(
+                this.document[this.paragraphIndex].content.split(''),
+                selection[0],
+                key
+            ).join('')
+
+        }
         this.allText = this.document.map((p) => p.content).join('')
         this.location = this.location + 1
+        this.selection = undefined
 
         return this
     }
@@ -215,4 +227,4 @@ class Document {
 }
 
 export default Document
-// ✓✓✓✓✓✓✓✓✓✓✓✓
+// ✓✓✓✓✓✓✓✓✓✓✓✓✓

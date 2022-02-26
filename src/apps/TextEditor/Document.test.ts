@@ -140,4 +140,23 @@ describe('Document', () => {
         expect(newDoc.allText).toBe('abc ef hi')
         expect(newDoc.document[1].style).toBe('bold')
     })
+
+    test('replaces selection', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .keyStroke(' ')
+            .keyStroke('e')
+            .keyStroke('f')
+            .keyStroke(' ')
+            .keyStroke('h')
+            .keyStroke('i')
+            .select(3,3)
+            .keyStroke('d')
+
+        expect(newDoc.allText).toBe('abcdef hi')
+        expect(newDoc.selection).toBeUndefined()
+    })
 })
