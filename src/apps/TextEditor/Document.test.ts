@@ -118,4 +118,26 @@ describe('Document', () => {
         expect(newDoc.allText).toBe('abc ef hi')
         expect(newDoc.document[1].style).toBe('bold')
     })
+
+    test('styles selection', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .keyStroke(' ')
+            .keyStroke('e')
+            .keyStroke('f')
+            .keyStroke(' ')
+            .keyStroke('h')
+            .keyStroke('i')
+            .select(1,5)
+            .style('bold')
+
+        expect(newDoc.document).toHaveLength(3)
+        expect(newDoc.document[2].style).toBe('none')
+        expect(newDoc.document[1].content).toBe('bc e')
+        expect(newDoc.allText).toBe('abc ef hi')
+        expect(newDoc.document[1].style).toBe('bold')
+    })
 })

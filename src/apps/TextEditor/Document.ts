@@ -157,8 +157,8 @@ class Document {
     style(style: Style): this {
         this._getLocation()
 
-        if (this.locationInParagraph < this.document[this.paragraphIndex].content.length) {
-            this.selection = getWordRangeFromIndex(this.document[this.paragraphIndex].content, this.locationInParagraph)
+        if ((this.locationInParagraph < this.document[this.paragraphIndex].content.length) || this.selection) {
+            if (!this.selection) this.selection = getWordRangeFromIndex(this.document[this.paragraphIndex].content, this.locationInParagraph)
             const currentContent = this.document[this.paragraphIndex].content 
 
             // set text of first paragraph to the first section of the original content
