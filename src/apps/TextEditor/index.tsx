@@ -1,19 +1,46 @@
 import React, { useEffect } from 'react'
 import useActions from '../../useActions'
-// import useAppState from '../useAppState';
+import useAppState from '../../useAppState'
+import Cursor from './Cursor'
+import Document from './Document'
 
 const TextEditor = () => {
     const act = useActions()
-    // const {get} = useAppState()
+    const {get} = useAppState()
+    const doc: Document = get('TEXT_EDITOR_DOCUMENT') as Document
 
     useEffect(() => {
-        act('TEXT_EDITOR_INIT')
+        'Start Typing...'.split('').map(char => {
+            act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
+        })
+
+        document.addEventListener('keydown', ({key}) => {
+            if (key.length === 1) {
+                act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', key)
+            } else if (key === 'Backspace') {
+                act('TEXT_EDITOR_DOCUMENT_DELETE')
+            } else if (key === 'ArrowLeft') {
+                act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
+            } else if (key === 'ArrowRight') {
+                act('TEXT_EDITOR_DOCUMENT_CURSOR_RIGHT')
+            }
+        })
     }, [])
 
+    console.log(doc.allText)
+
     return (
-        <>
-            <b>TextEditor</b>
-        </>
+        <div className='TE'>
+            <h3>TextEditor</h3>
+            {doc.document.map(p => p.content.split('').map((char, i) => {
+                return (
+                    <span key={i}>
+                        <span>{char}</span>
+                        {(i+1 === doc.location) ? <Cursor/> : ''}
+                    </span>
+                )
+            }))}
+        </div>
     )   
 }
 

@@ -1,29 +1,27 @@
 import React, {createContext} from 'react'
 import { useState } from 'react'
-
-interface State {
-  [key: string]: unknown;
-}
+import { State, InitialState, StateKeys, StateValues } from './State'
 
 interface StateContext {
-  get: (value: string) => unknown;
+  get: (value: StateKeys) => StateValues;
   set: (v: string, value: unknown) => void;
-      }
+}
 
 export const AppState = createContext<StateContext>({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    get: (_value: string) => undefined,
+    get: (_value: StateKeys) => undefined,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    set: (_value: string) => undefined
+    set: (_value: string) => undefined,
 })
 
 export const AppStateProvider = ({children}: {
     children: React.ReactNode
 }) => {
-    const [state, setState] = useState<State>({})
+    const [state, setState] = useState<State>(InitialState)
 
-    const get = (value: string): unknown => {
-        return state[value]
+    const get = (value: StateKeys): unknown => {
+        if (!state[value]) throw new Error('State does not exist!')
+        return state[value] as StateValues
     }
 
     const set = (v: string, value: unknown) : void => {
@@ -35,7 +33,7 @@ export const AppStateProvider = ({children}: {
     console.log(state)
 
     return (
-        <AppState.Provider value={{get, set}}>
+        <AppState.Provider value={{get, set} as StateContext}>
             {children}
         </AppState.Provider>
     )

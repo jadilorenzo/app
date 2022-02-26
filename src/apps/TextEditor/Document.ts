@@ -208,21 +208,24 @@ class Document {
     
     delete(): this {
         this._getLocation()
-        if (this.selection) {
-            this.document[this.paragraphIndex].content = removeRange(
-                this.document[this.paragraphIndex].content.split(''),
-                this.selection[0],
-                this.selection[1]
-            ).join('')
-        } else {
-            this.document[this.paragraphIndex].content = remove(
-                this.document[this.paragraphIndex].content.split(''),
-                this.locationInParagraph - 1
-            ).join('')
+        if (this.allText !== '') {
+            if (this.selection) {
+                this.document[this.paragraphIndex].content =
+              removeRange(
+                  this.document[this.paragraphIndex].content.split(''),
+                  this.selection[0],
+                  this.selection[1]
+              ).join('') || ''
+            } else {
+                this.document[this.paragraphIndex].content =
+              remove(
+                  this.document[this.paragraphIndex].content.split(''),
+                  this.locationInParagraph - 1
+              ).join('') || ''
+            }
+            this.allText = this.document.map((p) => p.content).join('')
+            this.location = this.location - 1
         }
-        this.allText = this.document.map((p) => p.content).join('')
-        this.location = this.location - 1
-
         return this
     }
 }
