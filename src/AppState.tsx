@@ -30,7 +30,7 @@ export const AppStateProvider = ({children}: {
         })
     }
 
-    // console.log(state)
+    console.log(state)
 
     return (
         <AppState.Provider value={{get, set} as StateContext}>

@@ -15,7 +15,7 @@ const TextEditor = () => {
         })
 
         document.addEventListener('keydown', ({key}) => {
-            if (key === 'Space') {
+            if (key === ' ') {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', ' ')
             } else if (key.length === 1) {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', key)
@@ -44,8 +44,19 @@ const TextEditor = () => {
                 {doc.document.map(p => p.content.split('').map((char, i) => {
                     return (
                         <span key={i}>
-                            <span onMouseDown={() => act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', i)}>{char}</span>
-                            {(i+1 === doc.location) ? <Cursor/> : ''}
+                            <span
+                                onMouseDown={() =>
+                                    act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', i)
+                                }
+                            >
+                                {char !== ' ' ? (
+                                    char
+                                ) : (
+                                    // Handles multiple white-spaces
+                                    <span style={{whiteSpace: 'pre-wrap'}}> </span>
+                                )}
+                            </span>
+                            {}
                         </span>
                     )
                 }))}

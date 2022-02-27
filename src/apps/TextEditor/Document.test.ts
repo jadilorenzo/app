@@ -173,4 +173,15 @@ describe('Document', () => {
 
         expect(newDoc.document[1].styleCSS).toBe('color: blue;')
     })
+
+    test('applys large amounts of text and multiple spaces', () => {
+        const doc = new Document()
+        const sampleText = 'abcdefghijklmnopqrstuvwxyz  ...  ...'
+        let newDoc = doc
+        sampleText.split('').map((key) => {
+            newDoc = newDoc.keyStroke(key)
+        })
+
+        expect(newDoc.allText).toBe(sampleText)
+    })
 })
