@@ -225,6 +225,7 @@ class Document {
             }
             this.allText = this.document.map((p) => p.content).join('')
             this.location = this.location - 1
+            this.selection = undefined
         }
         return this
     }

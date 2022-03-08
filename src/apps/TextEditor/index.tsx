@@ -4,17 +4,28 @@ import useAppState from '../../useAppState'
 import Cursor from './Cursor'
 import Document from './Document'
 
+function isBetween(n: number, a: number, b: number) {
+    return (n - a) * (n - b) <= 0
+}
+
 const TextEditor = () => {
     const act = useActions()
     const {get} = useAppState()
     const doc: Document = get('TEXT_EDITOR_DOCUMENT') as Document
-   
+    const selection = get('TEXT_EDITOR_SELECTION') as [number, number]
+    const selecting =
+      doc.selection &&
+      doc.selection[1] !== 0 &&
+      doc.selection[0] !== doc.selection[1]
+
+    console.log(selecting)
+
     useEffect(() => {
-        'Start Typing...'.split('').map(char => {
+        'Start Typing...'.split('').map((char) => {
             act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
         })
 
-        document.addEventListener('keydown', ({key}) => {
+        document.addEventListener('keydown', ({ key }) => {
             if (key === ' ') {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', ' ')
             } else if (key.length === 1) {
@@ -30,34 +41,45 @@ const TextEditor = () => {
 
         return () => {
             for (let index = 0; index < doc.allText.length; index++) {
-                act('TEXT_EDITOR_DOCUMENT_DELETE') 
+                act('TEXT_EDITOR_DOCUMENT_DELETE')
             }
         }
     }, [])
-
-
-
+    
     return (
         <div>
             <h3>TextEditor</h3>
-            <div>
+            <div style={{display: 'flex'}}> 
+                {(doc.location === 0) ? <Cursor /> : ''}
                 {doc.document.map(p => p.content.split('').map((char, i) => {
                     return (
-                        <span key={i}>
-                            <span
-                                onMouseDown={() =>
+                        <div key={i} style={{ display: 'flex' }}>
+                            <div
+                                style={{
+                                    background:
+                                    selecting &&
+                                    isBetween(i, doc.selection ? doc.selection[0] : -1, doc.selection ? doc.selection[1]: -1)
+                                        ? '#e1efff'
+                                        : undefined,
+                                }}
+                                onMouseDown={() => {
                                     act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', i)
-                                }
+                                    act('TEXT_EDITOR_LOCATION_START', i)
+                                }}
+                                onMouseUp={() => {
+                                    if (selection[0]) {
+                                        act('TEXT_EDITOR_LOCATION_END', i)
+                                    }
+                                }}
                             >
                                 {char !== ' ' ? (
                                     char
                                 ) : (
-                                    // Handles multiple white-spaces
-                                    <span style={{whiteSpace: 'pre-wrap'}}> </span>
+                                    <div style={{ whiteSpace: 'pre-wrap' }}> </div>
                                 )}
-                            </span>
+                            </div>
                             {}
-                        </span>
+                        </div>
                     )
                 }))}
             </div>

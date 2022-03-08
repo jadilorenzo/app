@@ -12,18 +12,20 @@ export default function Cursor() {
 
     return (
         <>
-            {on ? (
-                <span
-                    style={{
-                        display: 'inline-block',
-                        height: '1em',
-                        width: '1px',
-                        background: 'black',
-                    }}
-                />
-            ) : (
-                <span style={{ display: 'inline-block', width: '1px' }} />
-            )}
+            <div
+                style={
+                    on
+                        ? {
+                            // position: 'relative',
+                            // bottom: '1rem',
+                            // // left: '0.1rem',
+                            height: '1rem',
+                            width: '0.1rem',
+                            background: 'black',
+                        }
+                        : { width: '0.1rem' }
+                }
+            />
         </>
     )
 }

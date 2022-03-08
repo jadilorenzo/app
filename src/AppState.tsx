@@ -20,7 +20,7 @@ export const AppStateProvider = ({children}: {
     const [state, setState] = useState<State>(InitialState)
 
     const get = (value: StateKeys): unknown => {
-        if (!state[value]) throw new Error('State does not exist!')
+        // if (!state[value]) throw new Error('State does not exist!')
         return state[value] as StateValues
     }
 
