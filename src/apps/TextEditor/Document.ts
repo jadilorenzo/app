@@ -225,7 +225,10 @@ class Document {
             }
             this.allText = this.document.map((p) => p.content).join('')
             this.location = this.location - 1
-            this.selection = undefined
+            if (this.selection) {
+                this.location = this.selection[0]
+                this.selection = undefined
+            }
         }
         return this
     }

@@ -78,7 +78,7 @@ const TextEditor = () => {
                                     <div style={{ whiteSpace: 'pre-wrap' }}> </div>
                                 )}
                             </div>
-                            {}
+                            {i + 1 === doc.location ? <Cursor/> : ''}
                         </div>
                     )
                 }))}
