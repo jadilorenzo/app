@@ -3,7 +3,7 @@ import { act } from 'react-dom/test-utils'
 import Document from './apps/TextEditor/Document'
 import useAppState from './useAppState'
 
-const useActions = () => {
+const useTextEditorActions = () => {
     const {get, set} = useAppState()
     return (
         value:
@@ -14,7 +14,8 @@ const useActions = () => {
         | 'TEXT_EDITOR_DOCUMENT_CURSOR_RIGHT'
         | 'TEXT_EDITOR_DOCUMENT_SET_CURSOR'
         | 'TEXT_EDITOR_LOCATION_START'
-        | 'TEXT_EDITOR_LOCATION_END',
+        | 'TEXT_EDITOR_LOCATION_END'
+        | 'TEXT_EDITOR_ACTIVE_LOCATION',
         data?: unknown
     ) => {
         switch (value) {
@@ -58,7 +59,7 @@ const useActions = () => {
         }
         case 'TEXT_EDITOR_LOCATION_END': {
             let selection = get('TEXT_EDITOR_SELECTION') as [number, number]
-            const newSelection: [number, number]= [selection[0], data as number]
+            const newSelection: [number, number] = [selection[0], data as number]
             set('TEXT_EDITOR_SELECTION', [selection[0], data as number])
             selection = newSelection
             if (selection[1] !== 0 && selection[0] !== selection[1]) {
@@ -67,10 +68,14 @@ const useActions = () => {
                     (get('TEXT_EDITOR_DOCUMENT') as Document).select(
                         selection[0],
                         selection[1]
-                    )    
+                    )
                 )
                 set('TEXT_EDITOR_SELECTION', undefined)
             }
+            break
+        }
+        case 'TEXT_EDITOR_ACTIVE_LOCATION': {
+            set('TEXT_EDITOR_ACTIVE_LOCATION', data as number)
             break
         }
 
@@ -80,4 +85,4 @@ const useActions = () => {
     }
 }
 
-export default useActions
+export default useTextEditorActions

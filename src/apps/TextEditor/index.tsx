@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import useActions from '../../useActions'
+import useActions from '../../useTextEditorActions'
 import useAppState from '../../useAppState'
 import Cursor from './Cursor'
 import Document from './Document'
@@ -13,6 +13,7 @@ const TextEditor = () => {
     const {get} = useAppState()
     const doc: Document = get('TEXT_EDITOR_DOCUMENT') as Document
     const selection = get('TEXT_EDITOR_SELECTION') as [number, number]
+    const activeLocation = get('TEXT_EDITOR_ACTIVE_LOCATION') as number
     const selecting =
       doc.selection &&
       doc.selection[1] !== 0 &&
@@ -52,15 +53,32 @@ const TextEditor = () => {
             <div style={{display: 'flex'}}> 
                 {(doc.location === 0) ? <Cursor /> : ''}
                 {doc.document.map(p => p.content.split('').map((char, i) => {
+                    let shouldSelect = false
+                    const betweenPermanentRange = isBetween(
+                        i,
+                        doc.selection ? doc.selection[0] : -1,
+                        doc.selection ? doc.selection[1] : -1
+                    )
+                    const betweenTemporaryRange = isBetween(
+                        i,
+                        selection ? selection[0] : -1,
+                        activeLocation
+                    )
+                    // if selecting and between permanent range -> highlight
+                    // else if not selecting but range is incomplete and between temporary range -> highlight
+                    if (selecting && betweenPermanentRange) {
+                        shouldSelect = true
+                    } 
+                    if (selection) {
+                        if (!selecting && (selection[1] === 0) && betweenTemporaryRange) {
+                            shouldSelect = true
+                        }
+                    }
                     return (
                         <div key={i} style={{ display: 'flex' }}>
                             <div
                                 style={{
-                                    background:
-                                    selecting &&
-                                    isBetween(i, doc.selection ? doc.selection[0] : -1, doc.selection ? doc.selection[1]: -1)
-                                        ? '#e1efff'
-                                        : undefined,
+                                    background: shouldSelect ? '#e1efff' : undefined,
                                 }}
                                 onMouseDown={() => {
                                     act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', i)
@@ -71,6 +89,9 @@ const TextEditor = () => {
                                         act('TEXT_EDITOR_LOCATION_END', i)
                                     }
                                 }}
+                                onMouseEnter={() => {
+                                    act('TEXT_EDITOR_ACTIVE_LOCATION', i)
+                                }}
                             >
                                 {char !== ' ' ? (
                                     char
@@ -78,7 +99,7 @@ const TextEditor = () => {
                                     <div style={{ whiteSpace: 'pre-wrap' }}> </div>
                                 )}
                             </div>
-                            {i + 1 === doc.location ? <Cursor/> : ''}
+                            {i + 1 === doc.location ? <Cursor /> : ''}
                         </div>
                     )
                 }))}
