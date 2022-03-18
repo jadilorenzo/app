@@ -18,10 +18,11 @@ export default function Cursor() {
                         ? {
                             // position: 'relative',
                             // bottom: '1rem',
-                            // // left: '0.1rem',
-                            height: '1rem',
+                            // left: '0.1rem',
+                            height: '1.2rem',
                             width: '0.1rem',
                             background: 'black',
+                            // clear: 'both',
                         }
                         : { width: '0.1rem' }
                 }

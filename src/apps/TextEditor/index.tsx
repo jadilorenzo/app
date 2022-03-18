@@ -22,9 +22,10 @@ const TextEditor = () => {
     console.log(selecting)
 
     useEffect(() => {
-        'Start Typing...'.split('').map((char) => {
+        'Start Typing... '.split('').map((char) => {
             act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
         })
+        act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
 
         document.addEventListener('keydown', ({ key }) => {
             if (key === ' ') {
@@ -51,7 +52,7 @@ const TextEditor = () => {
         <div>
             <h3>TextEditor</h3>
             <div style={{display: 'flex'}}> 
-                {(doc.location === 0) ? <Cursor /> : ''}
+                {(doc.location === 0) ?  <div style={{width: '0'}}><Cursor /></div> : ''}
                 {doc.document.map(p => p.content.split('').map((char, i) => {
                     let shouldSelect = false
                     const betweenPermanentRange = isBetween(
@@ -65,10 +66,10 @@ const TextEditor = () => {
                         activeLocation
                     )
                     // if selecting and between permanent range -> highlight
-                    // else if not selecting but range is incomplete and between temporary range -> highlight
                     if (selecting && betweenPermanentRange) {
                         shouldSelect = true
-                    } 
+                    }
+                    // if not selecting and range is incomplete and between temporary range -> highlight
                     if (selection) {
                         if (!selecting && (selection[1] === 0) && betweenTemporaryRange) {
                             shouldSelect = true
@@ -99,7 +100,7 @@ const TextEditor = () => {
                                     <div style={{ whiteSpace: 'pre-wrap' }}> </div>
                                 )}
                             </div>
-                            {i + 1 === doc.location ? <Cursor /> : ''}
+                            {i + 1 === doc.location ? <div style={{width: '0'}}><Cursor /></div> : ''}
                         </div>
                     )
                 }))}

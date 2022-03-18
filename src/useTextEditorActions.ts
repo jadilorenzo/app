@@ -50,6 +50,7 @@ const useTextEditorActions = () => {
             const doc = get('TEXT_EDITOR_DOCUMENT') as Document
             doc.location = data as number
             doc._getLocation()
+            doc.selection = undefined
             set('TEXT_EDITOR_DOCUMENT', doc)
             break
         }
