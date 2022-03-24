@@ -1,6 +1,6 @@
 type Style = 'bold' | 'italics' | 'underlined' | 'strikethrough' | 'custom' | 'none'
 
-interface Paragraph {
+export interface Paragraph {
     type: 'text' | 'image'
     style?: Style
     styleCSS?: string
@@ -82,7 +82,7 @@ class Document {
         let previousParagraphCharacters = 0
         for (const paragraph of previousParagraphs) {
             previousParagraphCharacters =
-            previousParagraphCharacters + paragraph.content.length
+            previousParagraphCharacters + paragraph.content.length - 1
         }
 
         this.locationInParagraph = this.location - previousParagraphCharacters
@@ -93,6 +93,7 @@ class Document {
         if (this.location !== 0) {
             this.location = this.location - 1
         }
+        this._getLocation()
         return this
     }
 
@@ -101,6 +102,7 @@ class Document {
         if (this.location !== this.allText.length) {
             this.location = this.location + 1
         }
+        this._getLocation()
         return this
     }
 
@@ -130,6 +132,7 @@ class Document {
         this.allText = this.document.map((p) => p.content).join('')
         this.location = this.location + 1
         this.selection = undefined
+        this._getLocation()
 
         return this
     }
@@ -140,7 +143,7 @@ class Document {
             // set text of first paragraph to the first half of the original content
             this.document = insert(
                 this.document,
-                this.paragraphIndex - 1,
+                this.paragraphIndex,
                 {
                     ...this.document[this.paragraphIndex],
                     content: this.document[this.paragraphIndex].content.slice(0, this.locationInParagraph)
@@ -161,6 +164,9 @@ class Document {
                     newLine: true
                 }
             ) as Paragraph[]
+
+            // this.location = this.location - 1
+            this._getLocation()
         }
 
         return this
@@ -202,7 +208,9 @@ class Document {
         } else {
             this.document[this.paragraphIndex].style = style
         }
-        
+
+        // this._getLocation()
+    
         return this
     }
     
@@ -220,16 +228,18 @@ class Document {
                 this.document[this.paragraphIndex].content =
               remove(
                   this.document[this.paragraphIndex].content.split(''),
-                  this.locationInParagraph - 1
+                  this.locationInParagraph-1
               ).join('') || ''
             }
             this.allText = this.document.map((p) => p.content).join('')
             this.location = this.location - 1
             if (this.selection) {
                 this.location = this.selection[0]
+                this._getLocation()
                 this.selection = undefined
             }
         }
+        this._getLocation()
         return this
     }
 }

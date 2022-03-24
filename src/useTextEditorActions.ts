@@ -15,7 +15,8 @@ const useTextEditorActions = () => {
         | 'TEXT_EDITOR_DOCUMENT_SET_CURSOR'
         | 'TEXT_EDITOR_LOCATION_START'
         | 'TEXT_EDITOR_LOCATION_END'
-        | 'TEXT_EDITOR_ACTIVE_LOCATION',
+        | 'TEXT_EDITOR_ACTIVE_LOCATION' 
+        | 'TEXT_EDITOR_DOCUMENT_NEW_LINE',
         data?: unknown
     ) => {
         switch (value) {
@@ -77,6 +78,13 @@ const useTextEditorActions = () => {
         }
         case 'TEXT_EDITOR_ACTIVE_LOCATION': {
             set('TEXT_EDITOR_ACTIVE_LOCATION', data as number)
+            break
+        }
+        case 'TEXT_EDITOR_DOCUMENT_NEW_LINE': {
+            set(
+                'TEXT_EDITOR_DOCUMENT',
+                (get('TEXT_EDITOR_DOCUMENT') as Document).newLine()
+            )
             break
         }
 

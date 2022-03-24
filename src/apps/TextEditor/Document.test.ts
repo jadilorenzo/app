@@ -30,15 +30,20 @@ describe('Document', () => {
         ).toBe(1)
     })
 
+    test('moves cursor in paragraphs', () => {
+        const doc = new Document()
+        expect(doc.keyStroke('a').keyStroke('b').cursorLeft().locationInParagraph).toBe(1)
+    })
+
     test('inserts with moved cursor', () => {
         const doc = new Document()
         expect(
             doc
-                .keyStroke('c')
+                .keyStroke('c') // c
                 .cursorLeft()
-                .keyStroke('b')
+                .keyStroke('b') // b|c
                 .cursorLeft()
-                .keyStroke('a')
+                .keyStroke('a') // a|b|c
                 .cursorLeft().allText
         ).toBe('abc')
     })
@@ -79,6 +84,16 @@ describe('Document', () => {
         expect(newDoc.document[1].newLine).toBe(true)
         expect(newDoc.document[2].content).toBe('b')
         expect(newDoc.document).toHaveLength(3)
+    })
+
+    test('has correct location in paragraph', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .cursorLeft()
+        expect(newDoc.locationInParagraph).toBe(newDoc.location)
     })
 
     test('carries style after new paragraph', () => {
@@ -181,6 +196,27 @@ describe('Document', () => {
         sampleText.split('').map((key) => {
             newDoc = newDoc.keyStroke(key)
         })
+
+        expect(newDoc.allText).toBe(sampleText)
+    })
+
+    test('cursor back and forth between new line', () => {
+        const doc = new Document()
+        const sampleText = 'abcdefghijklmnopqrstuvwxyz  ...  ...'
+        let newDoc = doc
+        sampleText.split('').map((key) => {
+            newDoc = newDoc.keyStroke(key)
+        })
+        newDoc.location = 10
+        newDoc._getLocation()
+        newDoc.newLine()
+        for (let index = 0; index < 10; index++) {
+            newDoc.cursorLeft()
+        }
+        for (let index = 0; index < 15; index++) {
+            newDoc.cursorRight()
+        }
+        
 
         expect(newDoc.allText).toBe(sampleText)
     })

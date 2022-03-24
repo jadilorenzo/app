@@ -1,25 +1,10 @@
 import React, { useEffect } from 'react'
 import useActions from '../../useTextEditorActions'
-import useAppState from '../../useAppState'
-import Cursor from './Cursor'
-import Document from './Document'
-
-function isBetween(n: number, a: number, b: number) {
-    return (n - a) * (n - b) <= 0
-}
+import Header from './Header'
+import TE from './TE'
 
 const TextEditor = () => {
     const act = useActions()
-    const {get} = useAppState()
-    const doc: Document = get('TEXT_EDITOR_DOCUMENT') as Document
-    const selection = get('TEXT_EDITOR_SELECTION') as [number, number]
-    const activeLocation = get('TEXT_EDITOR_ACTIVE_LOCATION') as number
-    const selecting =
-      doc.selection &&
-      doc.selection[1] !== 0 &&
-      doc.selection[0] !== doc.selection[1]
-
-    console.log(selecting)
 
     useEffect(() => {
         'Start Typing... '.split('').map((char) => {
@@ -38,73 +23,17 @@ const TextEditor = () => {
                 act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
             } else if (key === 'ArrowRight') {
                 act('TEXT_EDITOR_DOCUMENT_CURSOR_RIGHT')
+            } else if (key === 'Enter') {
+                act('TEXT_EDITOR_DOCUMENT_NEW_LINE')
             }
         })
-
-        return () => {
-            for (let index = 0; index < doc.allText.length; index++) {
-                act('TEXT_EDITOR_DOCUMENT_DELETE')
-            }
-        }
     }, [])
     
     return (
         <div>
+            <Header/>
             <h3>TextEditor</h3>
-            <div style={{display: 'flex'}}> 
-                {(doc.location === 0) ?  <div style={{width: '0'}}><Cursor /></div> : ''}
-                {doc.document.map(p => p.content.split('').map((char, i) => {
-                    let shouldSelect = false
-                    const betweenPermanentRange = isBetween(
-                        i,
-                        doc.selection ? doc.selection[0] : -1,
-                        doc.selection ? doc.selection[1] : -1
-                    )
-                    const betweenTemporaryRange = isBetween(
-                        i,
-                        selection ? selection[0] : -1,
-                        activeLocation
-                    )
-                    // if selecting and between permanent range -> highlight
-                    if (selecting && betweenPermanentRange) {
-                        shouldSelect = true
-                    }
-                    // if not selecting and range is incomplete and between temporary range -> highlight
-                    if (selection) {
-                        if (!selecting && (selection[1] === 0) && betweenTemporaryRange) {
-                            shouldSelect = true
-                        }
-                    }
-                    return (
-                        <div key={i} style={{ display: 'flex' }}>
-                            <div
-                                style={{
-                                    background: shouldSelect ? '#e1efff' : undefined,
-                                }}
-                                onMouseDown={() => {
-                                    act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', i)
-                                    act('TEXT_EDITOR_LOCATION_START', i)
-                                }}
-                                onMouseUp={() => {
-                                    if (selection[0]) {
-                                        act('TEXT_EDITOR_LOCATION_END', i)
-                                    }
-                                }}
-                                onMouseEnter={() => {
-                                    act('TEXT_EDITOR_ACTIVE_LOCATION', i)
-                                }}
-                            >
-                                {char !== ' ' ? (
-                                    char
-                                ) : (
-                                    <div style={{ whiteSpace: 'pre-wrap' }}> </div>
-                                )}
-                            </div>
-                            {i + 1 === doc.location ? <div style={{width: '0'}}><Cursor /></div> : ''}
-                        </div>
-                    )
-                }))}
-            </div>
+            <TE/>
         </div>
     )   
 }

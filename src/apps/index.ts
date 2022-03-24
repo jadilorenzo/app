@@ -5,7 +5,7 @@ import Calculator from './Calculator'
 const Apps: {
   [key: string]: React.FC;
 } = {
-    TextEditor,
+    TE: TextEditor,
     Calculator
 }
 
