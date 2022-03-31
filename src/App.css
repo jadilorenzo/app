@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+.text  {
+  font-size: 16px;
+}
+
+.page {
+  margin: auto;
+  width: calc(75*10px/1.5);
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  padding: calc(10*10px/1.5);
+  border: 1.5px solid #e4e4e4;
+  height: calc(105*10px/1.5);
+  background: white;
+  text-overflow: wrap;
+}
+
+.page-container {
+  overflow-x: scroll;
+  height: calc(100vh - 8rem);
+  background: #fbfbfb;
+}
+
+.newline {
+  content: "\A";
+  white-space: pre;
+  display: block;
+}

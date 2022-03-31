@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import useActions from '../../useTextEditorActions'
 import Header from './Header'
 import TE from './TE'
+import Toolbar from './TEToolbar'
 
 const TextEditor = () => {
     const act = useActions()
@@ -12,7 +13,7 @@ const TextEditor = () => {
         })
         act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
 
-        document.addEventListener('keydown', ({ key }) => {
+        document.addEventListener('keydown', ({ key, target }) => {
             if (key === ' ') {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', ' ')
             } else if (key.length === 1) {
@@ -24,16 +25,22 @@ const TextEditor = () => {
             } else if (key === 'ArrowRight') {
                 act('TEXT_EDITOR_DOCUMENT_CURSOR_RIGHT')
             } else if (key === 'Enter') {
-                act('TEXT_EDITOR_DOCUMENT_NEW_LINE')
+                // act('TEXT_EDITOR_DOCUMENT_NEW_LINE')
+                // CURRENTLY BROKEN
             }
+            return false
         })
     }, [])
     
     return (
         <div>
             <Header/>
-            <h3>TextEditor</h3>
-            <TE/>
+            <Toolbar/>
+            <div className="page-container">
+                <div className="page">
+                    <TE/>
+                </div>
+            </div>
         </div>
     )   
 }

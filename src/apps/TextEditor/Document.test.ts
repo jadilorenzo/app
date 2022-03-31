@@ -8,26 +8,27 @@ describe('Document', () => {
 
     test('handles single keystroke', () => {
         const doc = new Document()
-        expect(doc.keyStroke('a').allText).toBe('a')
+        const newDoc = doc.keyStroke('a')
+        expect(newDoc.allText).toBe('a')
     })
 
     test('handles several keystrokes', () => {
         const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
         expect(
-            doc
-                .keyStroke('a')
-                .keyStroke('b').allText
+            newDoc.allText
         ).toBe('ab')
     })
 
     test('moves cursor', () => {
         const doc = new Document()
-        expect(
-            doc
-                .keyStroke('a')
-                .keyStroke('b')
-                .cursorLeft().location
-        ).toBe(1)
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .cursorLeft()
+        expect(newDoc.location).toBe(1)
     })
 
     test('moves cursor in paragraphs', () => {
@@ -84,6 +85,22 @@ describe('Document', () => {
         expect(newDoc.document[1].newLine).toBe(true)
         expect(newDoc.document[2].content).toBe('b')
         expect(newDoc.document).toHaveLength(3)
+    })
+
+    test('moves between lines line', () => {
+        const doc = new Document()
+        let newDoc = doc.keyStroke('a')
+        newDoc = newDoc.keyStroke('b')
+        newDoc = newDoc.cursorLeft()
+        newDoc = newDoc.newLine()
+        newDoc = newDoc.cursorRight()
+        newDoc = newDoc.cursorRight()
+        expect(newDoc.paragraphIndex).toBe(2)
+        expect(newDoc.document).toHaveLength(3)
+        expect(newDoc.document[0].content).toBe('a')
+        expect(newDoc.document[1].newLine).toBe(true)
+        expect(newDoc.document[2].content).toBe('b')
+        
     })
 
     test('has correct location in paragraph', () => {

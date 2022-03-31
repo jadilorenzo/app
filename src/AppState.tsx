@@ -30,8 +30,38 @@ export const AppStateProvider = ({children}: {
         })
     }
 
+    console.log(state)
+
     return (
-        <AppState.Provider value={{get, set} as StateContext}>
+        <AppState.Provider value={{ get, set } as StateContext}>
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    border: '1.5px solid #f0f0f0',
+                    margin: '1rem',
+                    padding: '0.5rem',
+                    background: 'white',
+                }}
+            >
+                {/* FOR DEBUGGING PUROPSES ONLY */}
+                {/* <div>
+            Document:{' '}
+                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.document, null, 4)}
+                </div>
+                <div>
+            Location:{' '}
+                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.location, null, 4)}
+                </div>
+                <div>
+            Location In Paragraph:{' '}
+                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.location, null, 4)}
+                </div>
+                <div>
+            Paragraph Location:{' '}
+                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.paragraphIndex, null, 4)}
+                </div> */}
+            </div>
             {children}
         </AppState.Provider>
     )

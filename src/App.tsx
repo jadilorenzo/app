@@ -8,11 +8,14 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#FFFFFF'
+            main: '#36b223',
         },
         secondary: {
             main: '#595959',
         },
+    },
+    typography: {
+        fontFamily: 'Tomorrow, Avenir',
     },
 })
 

@@ -17,3 +17,13 @@ code {
   background-color: transparent;
 }
 
+** {
+  overflow: visible !important;
+}
+
+.sticky-logo {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 10px;
+  float: inline-start;
+}
