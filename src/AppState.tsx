@@ -44,8 +44,7 @@ export const AppStateProvider = ({children}: {
                     background: 'white',
                 }}
             >
-                {/* FOR DEBUGGING PUROPSES ONLY */}
-                {/* <div>
+                <div>
             Document:{' '}
                     {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.document, null, 4)}
                 </div>
@@ -60,7 +59,7 @@ export const AppStateProvider = ({children}: {
                 <div>
             Paragraph Location:{' '}
                     {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.paragraphIndex, null, 4)}
-                </div> */}
+                </div>
             </div>
             {children}
         </AppState.Provider>

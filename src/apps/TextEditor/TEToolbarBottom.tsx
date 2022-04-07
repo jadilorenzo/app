@@ -1,66 +1,66 @@
-import { Button, IconButton, Typography } from '@mui/material'
+import { Button, ButtonGroup, Typography } from '@mui/material'
 import React from 'react'
 
-export default function Toolbar() {
+export default function ToolbarBottom() {
     return (
-        <div
+        <span
             style={{
-                padding: '1rem',
-                borderBottom: '1.5px solid #EAEAEA',
+                flexGrow: 1,
+                height: 'calc(3rem-1rem)',
+                padding: '0.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyItems: 'center',
             }}
         >
-            <Typography style={{ marginRight: '0.5rem' }}>Toolbar</Typography>
-            <div
+            <span
                 style={{
                     display: 'block',
                     height: 'min-content',
-                    marginRight: '0.5rem',
+                    marginRight: '0.75rem',
                 }}
             >
                 <Typography style={{ fontSize: '1rem', fontWeight: 700 }}>
-            B
+              B
                 </Typography>
-            </div>
-            <div
+            </span>
+            <span
                 style={{
                     display: 'block',
                     height: 'min-content',
-                    marginRight: '0.5rem',
-                }}
-            >
-                <Typography style={{ fontSize: '1rem', textDecoration: 'underline' }}>
-            U
-                </Typography>
-            </div>
-            <div
-                style={{
-                    display: 'block',
-                    height: 'min-content',
-                    marginRight: '0.5rem',
+                    marginRight: '0.75rem',
                 }}
             >
                 <Typography
-                    style={{ fontSize: '1rem' }}
+                    style={{ fontSize: '1rem', textDecoration: 'underline' }}
                 >
-                    <em>I</em>
+              U
                 </Typography>
-            </div>
-            <div
+            </span>
+            <span
                 style={{
                     display: 'block',
                     height: 'min-content',
-                    marginRight: '0.5rem',
+                    marginRight: '0.75rem',
+                }}
+            >
+                <Typography style={{ fontSize: '1rem' }}>
+                    <em>I</em>
+                </Typography>
+            </span>
+            <span
+                style={{
+                    display: 'block',
+                    height: 'min-content',
+                    marginRight: '0.75rem',
                 }}
             >
                 <Typography
                     style={{ fontSize: '1rem', textDecoration: 'line-through' }}
                 >
-            S
+              S
                 </Typography>
-            </div>
-        </div>
+            </span>
+        </span>
     )
 }

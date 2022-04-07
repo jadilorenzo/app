@@ -55,7 +55,7 @@
 
 .page-container {
   overflow-x: scroll;
-  height: calc(100vh - 8rem);
+  height: calc(100vh - 6rem);
   background: #fbfbfb;
 }
 
@@ -63,4 +63,16 @@
   content: "\A";
   white-space: pre;
   display: block;
+}
+
+/* .MuiButtonGroup-root {
+  clip-path: polygon(100% 0%, 0.75rem 0, 0% 0%,
+      0% calc(100% - 0.75rem), 0.75rem 100%,
+      calc(100% - 0.75rem) 100%, 100% calc(100% - 0.75rem),
+      100% 0.75rem, calc(100% - 0.75rem) 0%);
+  border-radius: 0
+} */
+
+.MuiButton-root {
+   border-radius: 0
 }

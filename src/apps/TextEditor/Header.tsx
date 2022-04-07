@@ -1,27 +1,34 @@
 import React from 'react'
-import { AppBar, Typography, IconButton } from '@mui/material'
+import { Typography, IconButton } from '@mui/material'
 import Logo from './Logos/Logo17.png'
 import ShareIcon from '@mui/icons-material/ShareTwoTone'
 
 export default function Header() {
     return (
-        <AppBar
-            position="static"
-            elevation={0}
+        <span
             style={{
-                borderBottom: '1.5px solid #e4e4e4',
+                // border: '1.5px solid #e4e4e4',
                 overflow: 'none',
+                // background: '#fbfbfb',
+                display: 'inline-block',
                 background: 'white',
+                marginRight: '0.5rem',
                 color: 'black',
+                width: '15.25rem',
+                clipPath:
+            'polygon(0 0, 14.75rem 0, 14.75rem 2rem, 13.75rem 3rem, 0 3rem)',
+                position: 'sticky',
+                top: 0,
             }}
         >
-            <div
+            <span
                 style={{
                     padding: '1rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyItems: 'center',
                     overflow: 'none',
+                    height: '1rem',
                 }}
             >
                 <img
@@ -33,13 +40,12 @@ export default function Header() {
                     }}
                     className="sticky-logo"
                 />
-                <Typography variant="h5" style={{ marginLeft: '0.5rem' }}>
+                <Typography variant="h6" style={{ marginLeft: '0.5rem' }}>
                     <span style={{ fontWeight: 400 }}>Key Tools</span>
                 </Typography>
-                <div
+                <span
                     style={{
                         marginLeft: '0.75rem',
-                        height: '0.2rem',
                         fontSize: '0.65rem',
                         fontWeight: 300,
                         textTransform: 'uppercase',
@@ -47,12 +53,8 @@ export default function Header() {
                     }}
                 >
             Text Editor
-                </div>
-                <div style={{ flexGrow: 1 }} />
-                <IconButton color="primary">
-                    <ShareIcon />
-                </IconButton>
-            </div>
-        </AppBar>
+                </span>
+            </span>
+        </span>
     )
 }

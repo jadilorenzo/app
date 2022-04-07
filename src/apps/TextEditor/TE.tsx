@@ -1,7 +1,6 @@
 import React from 'react'
 import useAppState from '../../useAppState'
 import Document from './Document'
-import Cursor from './TECursor'
 import Line from './TELine'
 
 export default function TE() {
@@ -15,13 +14,6 @@ export default function TE() {
                     <Line p={p} i={i} />
                 </div>
             ))}
-            {/* {doc.allText.length === doc.location ? (
-                <div style={{ width: '0' }}>
-                    <Cursor />
-                </div>
-            ) : (
-                ''
-            )} */}
         </div>
     )
 }

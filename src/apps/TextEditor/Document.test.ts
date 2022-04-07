@@ -103,7 +103,7 @@ describe('Document', () => {
         
     })
 
-    test('has correct location in paragraph', () => {
+    test('has correct location in paragraph with single paragraph', () => {
         const doc = new Document()
         const newDoc = doc
             .keyStroke('a')
@@ -111,6 +111,20 @@ describe('Document', () => {
             .keyStroke('c')
             .cursorLeft()
         expect(newDoc.locationInParagraph).toBe(newDoc.location)
+    })
+
+    test('has correct location in paragraph with multiple paragraphs', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a') // 0
+            .keyStroke('b') // 1
+            .keyStroke('c') // 2
+            .keyStroke('d') // 3
+            .cursorLeft()   // 2
+            .cursorLeft()   // 1
+            .newLine()      // 0
+            .cursorRight()  // 1
+        expect(newDoc.locationInParagraph).toBe(1)
     })
 
     test('carries style after new paragraph', () => {

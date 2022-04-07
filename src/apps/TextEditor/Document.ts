@@ -69,35 +69,38 @@ class Document {
     }
 
     _getLocation() {
-        // const locationToParagraphIndex = [0]
-        // for (const paragraph of this.document) {
-        //     paragraph.content.split('').forEach(() => {
-        //         locationToParagraphIndex.push(this.document.indexOf(paragraph))
-        //     })
+        // const list : number[] = [] // list of lengths of paragrpahs
+        // for (const p of this.document) {
+        //     list.push(p.content.length)
         // }
-        const list : number[] = [] // list of lengths of paragrpahs
-        for (const p of this.document) {
-            list.push(p.content.length)
-        }
 
-        let runningTotal = 0
-        let iterationCount = 0
-        list.forEach((n) => {
-            if (runningTotal <= this.location && this.document.length !== 1) {
-                runningTotal = runningTotal + n
-                iterationCount = iterationCount + 1
+        // let runningTotal = 0
+        // let iterationCount = 0
+        // list.forEach((n) => {
+        //     if (runningTotal <= this.location && this.document.length !== 1) {
+        //         runningTotal = runningTotal + n
+        //         iterationCount = iterationCount + 1
+        //     }
+        // })
+        // this.paragraphIndex = iterationCount === 0 ? 0 : iterationCount-1
+        // this.locationInParagraph =
+        //   Math.abs(this.location - runningTotal)
+        let prevPargraphLengths = 0
+        let parIndex = 0
+        for (const paragraph of this.document) {
+            prevPargraphLengths =
+             prevPargraphLengths +
+             (paragraph.content.length)
+            parIndex = parIndex + 1
+            if (prevPargraphLengths >= this.location) {
+                prevPargraphLengths =
+               prevPargraphLengths - paragraph.content.length
+                parIndex = parIndex - 1
+                this.locationInParagraph = this.location - prevPargraphLengths
+                this.paragraphIndex = parIndex
             }
-        })
-        this.paragraphIndex = iterationCount === 0 ? 0 : iterationCount-1
-        this.locationInParagraph =
-          Math.abs(this.location - runningTotal)
+        }
           
-        // console.log(
-        //     runningTotal,
-        //     this.location,
-        //     Math.abs(this.location - runningTotal) - this.document[this.paragraphIndex].content.length
-        // )
-        // console.log(runningTotal, this.location)
         // ******************************** ERROR *****************************
         // So you have a list of paragraphs
         // You also have which char you're at.
@@ -105,17 +108,6 @@ class Document {
         // go through all prev paragraphs and add the length of their text to a list
         // go through each item in the list until your reach more than your char location
         
-        // this.paragraphIndex = locationToParagraphIndex[this.location]
-
-        // const previousParagraphs = this.document.splice(0, this.paragraphIndex)
-
-        // let previousParagraphCharacters = 0
-        // for (const paragraph of previousParagraphs) {
-        //     previousParagraphCharacters =
-        //     previousParagraphCharacters + paragraph.content.length - 1
-        // }
-
-        // this.locationInParagraph = this.location - previousParagraphCharacters
     }
 
     cursorLeft(): this {
@@ -195,9 +187,9 @@ class Document {
             ) as Paragraph[]
 
             this.location = this.location + 1
-            this._getLocation()
             this.locationInParagraph = 0
             this.paragraphIndex = this.paragraphIndex + 1
+            this._getLocation()
         }
 
         return this
