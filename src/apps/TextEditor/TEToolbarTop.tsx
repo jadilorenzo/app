@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material'
+import { Button } from '@mui/material'
 import React from 'react'
 import DocIcon from './Logos/DocIcon3.png'
 import ShareIcon from './Logos/ShareIcon3.png'
@@ -11,7 +11,7 @@ export default function ToolbarTop() {
                 display: 'flex',
             }}
         >
-            <div
+            <Button
                 style={{
                     display: 'inline',
                     borderRadius: 0,
@@ -19,17 +19,18 @@ export default function ToolbarTop() {
                 }}
             >
                 <img src={DocIcon} style={{ height: '1.25rem', margin: '0.5rem' }} />
-            </div>
-            <div
+            </Button>
+            <Button
                 style={{ display: 'inline', borderRadius: 0, textTransform: 'none' }}
             >
-                <img src={ShareIcon} style={{ height: '1.25rem', margin: '0.5rem' }} />
-            </div>
+                <img
+                    src={ShareIcon}
+                    style={{ height: '1.25rem', margin: '0.5rem' }}
+                />
+            </Button>
             <div
                 style={{ display: 'inline', borderRadius: 0, textTransform: 'none' }}
-            >
-          
-            </div>
+            ></div>
         </div>
     )
 }

@@ -68,46 +68,93 @@ class Document {
        
     }
 
-    _getLocation() {
-        // const list : number[] = [] // list of lengths of paragrpahs
-        // for (const p of this.document) {
-        //     list.push(p.content.length)
-        // }
+    // _getLocation() {
+    //     // const list : number[] = [] // list of lengths of paragrpahs
+    //     // for (const p of this.document) {
+    //     //     list.push(p.content.length)
+    //     // }
 
-        // let runningTotal = 0
-        // let iterationCount = 0
-        // list.forEach((n) => {
-        //     if (runningTotal <= this.location && this.document.length !== 1) {
-        //         runningTotal = runningTotal + n
-        //         iterationCount = iterationCount + 1
-        //     }
-        // })
-        // this.paragraphIndex = iterationCount === 0 ? 0 : iterationCount-1
-        // this.locationInParagraph =
-        //   Math.abs(this.location - runningTotal)
-        let prevPargraphLengths = 0
-        let parIndex = 0
-        for (const paragraph of this.document) {
-            prevPargraphLengths =
-             prevPargraphLengths +
-             (paragraph.content.length)
-            parIndex = parIndex + 1
-            if (prevPargraphLengths >= this.location) {
-                prevPargraphLengths =
-               prevPargraphLengths - paragraph.content.length
-                parIndex = parIndex - 1
-                this.locationInParagraph = this.location - prevPargraphLengths
-                this.paragraphIndex = parIndex
-            }
-        }
+    //     // let runningTotal = 0
+    //     // let iterationCount = 0
+    //     // list.forEach((n) => {
+    //     //     if (runningTotal <= this.location && this.document.length !== 1) {
+    //     //         runningTotal = runningTotal + n
+    //     //         iterationCount = iterationCount + 1
+    //     //     }
+    //     // })
+    //     // this.paragraphIndex = iterationCount === 0 ? 0 : iterationCount-1
+    //     // this.locationInParagraph =
+    //     //   Math.abs(this.location - runningTotal)
+    //     let prevPargraphLengths = 0
+    //     let parIndex = 0
+    //     for (const paragraph of this.document) {
+    //         prevPargraphLengths =
+    //          prevPargraphLengths +
+    //          (paragraph.content.length)
+    //         parIndex = parIndex + 1
+    //         if (prevPargraphLengths >= this.location) {
+    //             prevPargraphLengths =
+    //            prevPargraphLengths - paragraph.content.length
+    //             parIndex = parIndex - 1
+    //             this.locationInParagraph = this.location - prevPargraphLengths 
+    //             this.paragraphIndex = parIndex
+    //         }
+    //     }
           
-        // ******************************** ERROR *****************************
-        // So you have a list of paragraphs
-        // You also have which char you're at.
-        // So to figure out what par index you're at you have to 
-        // go through all prev paragraphs and add the length of their text to a list
-        // go through each item in the list until your reach more than your char location
+    //     // ******************************** ERROR *****************************
+    //     // So you have a list of paragraphs
+    //     // You also have which char you're at.
+    //     // So to figure out what par index you're at you have to 
+    //     // go through all prev paragraphs and add the length of their text to a list
+    //     // go through each item in the list until your reach more than your char location
         
+    // }
+
+    _getLocation(): this {
+        if (this.document.length === 1 || (this.paragraphIndex = 0)) {
+            this.locationInParagraph = this.location
+        } else if (
+            this.location >= this.document[this.paragraphIndex]?.content.length
+        ) {
+            if (this.document[this.paragraphIndex + 1]?.newLine) {
+                this.paragraphIndex = this.paragraphIndex + 2
+            } else {
+                this.paragraphIndex = this.paragraphIndex + 1
+            }
+            let index = 0
+            let prevParagraphLengths = 0
+            while (index !== this.paragraphIndex) {
+                prevParagraphLengths =
+              prevParagraphLengths + this.document[index]?.content.length
+                // console.log(index, prevParagraphLengths, this.document[index].content, this.location-prevParagraphLengths)
+                index = index + 1
+            }
+            const newLocationInParagraph = this.location - prevParagraphLengths
+            if (newLocationInParagraph !== -1) {
+                this.locationInParagraph = newLocationInParagraph
+            } else {
+                this.locationInParagraph = 0
+            }
+        } else if (
+            this.location <= this.document[this.paragraphIndex]?.content.length
+        ) {
+            if (this.paragraphIndex !== 0) {
+                this.paragraphIndex = this.paragraphIndex - 1
+            }
+            this.locationInParagraph = this.location
+            // let index = 0
+            // let prevParagraphLengths = 0
+            // while (index !== this.paragraphIndex) {
+            //     prevParagraphLengths =
+            //   prevParagraphLengths + this.document[index]?.content.length
+            //     // console.log(index, prevParagraphLengths, this.document[index].content, this.location-prevParagraphLengths)
+            //     index = index + 1
+            // }
+            // const newLocationInParagraph = this.location - prevParagraphLengths
+            // if (newLocationInParagraph !== -1)
+            //     this.locationInParagraph = newLocationInParagraph
+        }
+        return this
     }
 
     cursorLeft(): this {
@@ -188,7 +235,6 @@ class Document {
 
             this.location = this.location + 1
             this.locationInParagraph = 0
-            this.paragraphIndex = this.paragraphIndex + 1
             this._getLocation()
         }
 

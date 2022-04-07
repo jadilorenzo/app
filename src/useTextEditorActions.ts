@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { act } from 'react-dom/test-utils'
 import Document from './apps/TextEditor/Document'
 import useAppState from './useAppState'
 

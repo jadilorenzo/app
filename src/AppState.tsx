@@ -30,11 +30,20 @@ export const AppStateProvider = ({children}: {
         })
     }
 
-    console.log(state)
+    console.log(
+        {
+            'location':
+        state['TEXT_EDITOR_DOCUMENT'].location,
+            'locationInParagraph':
+        state['TEXT_EDITOR_DOCUMENT'].locationInParagraph,
+            'paragraphIndex':
+        state['TEXT_EDITOR_DOCUMENT'].paragraphIndex
+        }
+    )
 
     return (
         <AppState.Provider value={{ get, set } as StateContext}>
-            <div
+            {/* <div
                 style={{
                     position: 'absolute',
                     bottom: '0',
@@ -60,7 +69,7 @@ export const AppStateProvider = ({children}: {
             Paragraph Location:{' '}
                     {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.paragraphIndex, null, 4)}
                 </div>
-            </div>
+            </div> */}
             {children}
         </AppState.Provider>
     )
