@@ -10,8 +10,6 @@ export default function Cursor() {
         return () => clearTimeout(id)
     })
 
-    // const on = true
-
     return (
         <>
             <span style={{ height: 0, width: 0, display: 'inline-block' }}>

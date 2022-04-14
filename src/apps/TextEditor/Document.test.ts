@@ -239,16 +239,32 @@ describe('Document', () => {
             newDoc = newDoc.keyStroke(key)
         })
         newDoc.location = 10
-        newDoc._getLocation()
-        newDoc.newLine()
+        newDoc = newDoc._getLocation()
+        newDoc = newDoc.newLine()
         for (let index = 0; index < 10; index++) {
-            newDoc.cursorLeft()
+            newDoc = newDoc.cursorLeft()
         }
         for (let index = 0; index < 15; index++) {
-            newDoc.cursorRight()
+            newDoc = newDoc.cursorRight()
         }
         
 
+        expect(newDoc.allText).toBe(sampleText)
+    })
+
+    test('delete new line', () => {
+        const doc = new Document()
+        const sampleText = 'abcdefghijklmnopqrstuvwxyz  ...  ...'
+        let newDoc = doc
+        sampleText.split('').map((key) => {
+            newDoc = newDoc.keyStroke(key)
+        })
+        newDoc.location = 10
+        newDoc = newDoc._getLocation()
+        newDoc = newDoc.newLine()
+        newDoc = newDoc.delete()
+
+        expect(newDoc.document).toHaveLength(1)
         expect(newDoc.allText).toBe(sampleText)
     })
 })

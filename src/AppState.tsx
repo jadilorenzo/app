@@ -31,14 +31,7 @@ export const AppStateProvider = ({children}: {
     }
 
     console.log(
-        {
-            'location':
-        state['TEXT_EDITOR_DOCUMENT'].location,
-            'locationInParagraph':
-        state['TEXT_EDITOR_DOCUMENT'].locationInParagraph,
-            'paragraphIndex':
-        state['TEXT_EDITOR_DOCUMENT'].paragraphIndex
-        }
+        state
     )
 
     return (

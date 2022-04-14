@@ -14,7 +14,8 @@ const useTextEditorActions = () => {
         | 'TEXT_EDITOR_LOCATION_START'
         | 'TEXT_EDITOR_LOCATION_END'
         | 'TEXT_EDITOR_ACTIVE_LOCATION' 
-        | 'TEXT_EDITOR_DOCUMENT_NEW_LINE',
+        | 'TEXT_EDITOR_DOCUMENT_NEW_LINE'
+        | 'TEXT_EDITOR_DOCUMENT_CLEAR_SELECTION',
         data?: unknown
     ) => {
         switch (value) {
@@ -85,8 +86,14 @@ const useTextEditorActions = () => {
             )
             break
         }
+        case 'TEXT_EDITOR_DOCUMENT_CLEAR_SELECTION': {
+            const doc = get('TEXT_EDITOR_DOCUMENT') as Document
+            doc.selection = undefined
+            set('TEXT_EDITOR_DOCUMENT', doc)
+            break
+        }
 
-        default:
+        default: 
             throw new Error('ACT key does not exist.')
         }
     }

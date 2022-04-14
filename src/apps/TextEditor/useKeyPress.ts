@@ -23,8 +23,10 @@ const useKeyPress = () => {
                 act('TEXT_EDITOR_DOCUMENT_CURSOR_RIGHT')
             } else if (key === 'Enter') {
                 act('TEXT_EDITOR_DOCUMENT_NEW_LINE')
-                // CURRENTLY BROKEN
+            } else if (key === 'Escape') {
+                act('TEXT_EDITOR_DOCUMENT_CLEAR_SELECTION')
             }
+            
             return false
         })
     }, [])

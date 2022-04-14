@@ -12,21 +12,20 @@ export default function ToolbarTop() {
             }}
         >
             <Button
+                color="inherit"
                 style={{
                     display: 'inline',
                     borderRadius: 0,
                     textTransform: 'none',
                 }}
             >
-                <img src={DocIcon} style={{ height: '1.25rem', margin: '0.5rem' }} />
+                <img src={DocIcon} style={{ height: '1rem', margin: '0.5rem' }} />
             </Button>
             <Button
+                color="inherit"
                 style={{ display: 'inline', borderRadius: 0, textTransform: 'none' }}
             >
-                <img
-                    src={ShareIcon}
-                    style={{ height: '1.25rem', margin: '0.5rem' }}
-                />
+                <img src={ShareIcon} style={{ height: '1rem', margin: '0.5rem' }} />
             </Button>
             <div
                 style={{ display: 'inline', borderRadius: 0, textTransform: 'none' }}

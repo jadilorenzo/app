@@ -52,27 +52,26 @@ const Char = ({char, index, parIndex}: {
         }
     }
     
-
     const onMouseDown = () => {
-        act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', index !== 0 ? index : 0)
-        act('TEXT_EDITOR_LOCATION_START', index)
+        act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', doc._getGlobalLocation(parIndex, index))
+        act('TEXT_EDITOR_LOCATION_START', doc._getGlobalLocation(parIndex, index))
     }
 
     const onMouseUp = () => {
         if (selection[0]) {
-            act('TEXT_EDITOR_LOCATION_END', index)
+            act('TEXT_EDITOR_LOCATION_END', doc._getGlobalLocation(parIndex, index))
         }
     }
 
     const onMouseEnter = () => {
-        act('TEXT_EDITOR_ACTIVE_LOCATION', index)
+        act('TEXT_EDITOR_ACTIVE_LOCATION', doc._getGlobalLocation(parIndex, index))
     }
 
     return (
         <span key={index} style={{height: '1.2rem'}}>
             {index === doc.locationInParagraph &&
         parIndex === doc.paragraphIndex ? (
-                    <div style={{ height: 0, width: 0, display: 'inline-block' }}>
+                    <div style={{ height: 0, width: 0, display: 'inline' }}>
                         <Cursor />
                     </div>
                 ) : (
@@ -92,7 +91,7 @@ const Char = ({char, index, parIndex}: {
                 )}
             </span>
             {doc.allText.length === doc.location && index === doc.allText.length - 1 ? (
-                <div style={{ width: '0' }}>
+                <div style={{ width: '0', display: 'inline' }}>
                     <Cursor />
                 </div>
             ) : (
