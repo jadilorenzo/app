@@ -1,6 +1,6 @@
 import React from 'react'
 import useAppState from '../../useAppState'
-import useTextEditorActions from '../../useTextEditorActions'
+import useTextEditorActions from './useTextEditorActions'
 import Document from './Document'
 import Cursor from './TECursor'
 
@@ -29,13 +29,13 @@ const Char = ({char, index, parIndex}: {
         }
 
         const betweenPermanentRange = isBetween(
-            index,
+            doc._getGlobalLocation(parIndex, index),
             doc.selection ? doc.selection[0] : -1,
             doc.selection ? doc.selection[1] : -1
         )
 
         const betweenTemporaryRange = isBetween(
-            index,
+            doc._getGlobalLocation(parIndex, index),
             selection ? selection[0] : -1,
             activeLocation
         )
@@ -90,7 +90,7 @@ const Char = ({char, index, parIndex}: {
                     <span style={{ whiteSpace: 'pre-wrap' }}> </span>
                 )}
             </span>
-            {doc.allText.length === doc.location && index === doc.allText.length - 1 ? (
+            {doc.allText.length === doc.location && index === doc.allText.length ? (
                 <div style={{ width: '0', display: 'inline' }}>
                     <Cursor />
                 </div>

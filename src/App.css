@@ -42,21 +42,24 @@
 }
 
 .page {
-  margin: auto;
-  width: calc(75*10px/1.5);
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
-  padding: calc(10*10px/1.5);
-  border: 1.5px solid #e4e4e4;
-  height: calc(105*10px/1.5);
-  background: white;
+  height: 100%;
   text-overflow: wrap;
+  padding: 5rem;
+  background: white;
+  color: black;
 }
 
-.page-container {
+.page > * {
+  color: black;
+  font-family: Helvetica, sans-serif;
+}
+
+.MuiContainer-root {
   overflow-x: scroll;
   height: calc(100vh - 6rem);
-  background: #fbfbfb;
+  /* background: #fbfbfb; */
 }
 
 .newline {
@@ -76,3 +79,7 @@
 /* .MuiButton-root {
    border-radius: 0
 } */
+
+.MuiTab-root {
+  max-width: 2rem;
+}

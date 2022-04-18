@@ -1,14 +1,21 @@
-import { useEffect } from 'react'
-import useTextEditorActions from '../../useTextEditorActions'
+import { useContext, useEffect } from 'react'
+import { AppState } from '../../AppState'
+import useTextEditorActions from './useTextEditorActions'
+import Document from './Document'
 
 const useKeyPress = () => {
     const act = useTextEditorActions()
+    const {get} = useContext(AppState)
 
     useEffect(() => {
-        'Start Typing... '.split('').map((char) => {
-            act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
-        })
-        act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
+        const doc = get('TEXT_EDITOR_DOCUMENT') as Document
+
+        if (doc.allText === '') {
+            'Start Typing... '.split('').map((char) => {
+                act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
+            })
+            act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
+        }
 
         document.addEventListener('keydown', ({ key }) => {
             if (key === ' ') {

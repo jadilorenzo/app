@@ -1,21 +1,25 @@
+import { AppBar, Container, Paper } from '@mui/material'
+import { useTheme } from '@mui/system'
 import React from 'react'
 import Header from './Header'
 import TE from './TE'
 import ToolbarBottom from './TEToolbarBottom'
-import Toolbar from './TEToolbarBottom'
 import ToolbarTop from './TEToolbarTop'
 import useKeyPress from './useKeyPress'
 
 const TextEditor = () => {
-
+    const theme = useTheme()
     useKeyPress()
     
     return (
         <div>
-            <div
+            <AppBar
+                position='static'
+                variant='outlined'
+                elevation={0}
                 style={{
-                    background: '#f5F5F5',
-                    borderBottom: '1.5px solid #e4e4e4',
+                    background: (theme.palette.mode === 'dark') ? '#202020' :  '#f5F5F5',
+                    borderBottom: `2px solid ${theme.palette.primary.main}`,
                     display: 'block',
                     minWidth: '40rem'
                 }}
@@ -32,11 +36,13 @@ const TextEditor = () => {
                     
                 </span>
                 <ToolbarBottom />
-            </div>
-            <div className="page-container">
-                <div className="page">
-                    <TE />
-                </div>
+            </AppBar>
+            <div>
+                <Container style={{width: '650px'}}>
+                    <Paper className='page'>
+                        <TE />
+                    </Paper>
+                </Container>
             </div>
         </div>
     )   

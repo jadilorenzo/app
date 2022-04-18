@@ -36,19 +36,17 @@ export const AppStateProvider = ({children}: {
 
     return (
         <AppState.Provider value={{ get, set } as StateContext}>
-            {/* <div
+            <div
                 style={{
                     position: 'absolute',
                     bottom: '0',
-                    border: '1.5px solid #f0f0f0',
                     margin: '1rem',
                     padding: '0.5rem',
-                    background: 'white',
                 }}
             >
                 <div>
             Document:{' '}
-                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.document, null, 4)}
+                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.document.map(p => p.content), null, 4)}
                 </div>
                 <div>
             Location:{' '}
@@ -56,13 +54,13 @@ export const AppStateProvider = ({children}: {
                 </div>
                 <div>
             Location In Paragraph:{' '}
-                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.location, null, 4)}
+                    {state.TEXT_EDITOR_DOCUMENT.locationInParagraph}
                 </div>
                 <div>
             Paragraph Location:{' '}
                     {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.paragraphIndex, null, 4)}
                 </div>
-            </div> */}
+            </div>
             {children}
         </AppState.Provider>
     )

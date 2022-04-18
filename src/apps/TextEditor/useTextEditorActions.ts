@@ -1,5 +1,5 @@
-import Document from './apps/TextEditor/Document'
-import useAppState from './useAppState'
+import Document from './Document'
+import useAppState from '../../useAppState'
 
 const useTextEditorActions = () => {
     const {get, set} = useAppState()
