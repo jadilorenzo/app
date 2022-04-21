@@ -53,7 +53,7 @@ const Char = ({char, index, parIndex}: {
     }
     
     const onMouseDown = () => {
-        act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', doc._getGlobalLocation(parIndex, index))
+        act('TEXT_EDITOR_DOCUMENT_SET_CURSOR', {paragraphIndex: parIndex, locationInParagraph: index})
         act('TEXT_EDITOR_LOCATION_START', doc._getGlobalLocation(parIndex, index))
     }
 

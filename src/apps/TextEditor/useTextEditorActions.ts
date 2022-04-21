@@ -47,9 +47,8 @@ const useTextEditorActions = () => {
             )
             break
         case 'TEXT_EDITOR_DOCUMENT_SET_CURSOR': {
-            const doc = get('TEXT_EDITOR_DOCUMENT') as Document
-            doc.location = data as number
-            doc._getLocation()
+            let doc = get('TEXT_EDITOR_DOCUMENT') as Document
+            doc = doc.setLocation({incompleteLocation: data as {paragraphIndex: number, locationInParagraph: number}})
             doc.selection = undefined
             set('TEXT_EDITOR_DOCUMENT', doc)
             break

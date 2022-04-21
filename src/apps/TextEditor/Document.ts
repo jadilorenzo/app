@@ -67,42 +67,80 @@ class Document {
         this.locationInParagraph = 0
     }
 
-    _getLocation(): this {
-        let prevParagraphLengths = 0
-        let index = 0
-        for (const paragraph of this.document) {
-            if (index < this.paragraphIndex) {
-                prevParagraphLengths = prevParagraphLengths + paragraph.content.length
-            }
-            index = index + 1
+    setLocation({location, incompleteLocation}: {
+        location?: number
+        incompleteLocation?: {
+            locationInParagraph: number
+            paragraphIndex: number
         }
-        if (this.document.length === 1 || (this.paragraphIndex = 0)) {
-            this.locationInParagraph = this.location
-        } else if (this.location >= prevParagraphLengths) {
-            if (this.document[this.paragraphIndex + 1]?.newLine) {
-                this.paragraphIndex = this.paragraphIndex + 2
-            } else {
-                this.paragraphIndex = this.paragraphIndex + 1
-            }
-            let index = 0
+    }): this {
+        if (location !== undefined) {
+            // update
+            // -> location
+            this.location = location
+
+            // update
+            //  -> paragraphIndex
+            //  -> locationInParagraph
+            
+            // location - prevParagraphLengths (should) = locationInParagraph
+
+            // get prevParagraphLengths
             let prevParagraphLengths = 0
-            while (index !== this.paragraphIndex) {
-                prevParagraphLengths =
-          prevParagraphLengths + this.document[index]?.content.length
-                index = index + 1
+            const updatePrevParagraphLengths = () => {
+                let _index = 0
+                for (const paragraph of this.document) {
+                    if ((_index < this.paragraphIndex) && !paragraph.newLine) {
+                        prevParagraphLengths =
+                  prevParagraphLengths + paragraph.content.length
+                    }
+                    _index = _index + 1
+                }
             }
-            const newLocationInParagraph = this.location - prevParagraphLengths
-            if (newLocationInParagraph !== -1) {
-                this.locationInParagraph = newLocationInParagraph
-            } else {
-                this.locationInParagraph = 0
+            updatePrevParagraphLengths()
+
+            // update paragraphIndex first
+            //      if location - prevParagraphLengths (supposed locationInParagraph) > length of current paragraph 
+            //          add to paragraphIndex // skip newlines obviously
+            //          update prevParagraphLengths
+            if ((this.location - prevParagraphLengths) > this.document[this.paragraphIndex].content.length) {
+                console.log(
+                    this.paragraphIndex,
+                    this.document[this.paragraphIndex]
+                )
+                while (!this.document[this.paragraphIndex].newLine) {
+                    this.paragraphIndex = this.paragraphIndex + 1
+
+                    updatePrevParagraphLengths()
+                }
             }
-        } else if (this.location <= prevParagraphLengths) {
-            if (this.paragraphIndex !== 0) {
-                this.paragraphIndex = this.paragraphIndex - 1
+
+            // set locationInParagraph
+            this.locationInParagraph = this.location - prevParagraphLengths
+            
+            this.document.map((p) => p.content).join('')
+        } else if (incompleteLocation !== undefined) {
+            let docLocation = 0
+            let par = 0
+            for (const paragraph of this.document) {
+                if (incompleteLocation.paragraphIndex === 0) {
+                    docLocation = incompleteLocation.locationInParagraph
+                } else {
+                    if (incompleteLocation.paragraphIndex > par) {
+                        docLocation = docLocation + paragraph.content.length
+                        if (incompleteLocation.paragraphIndex === par + 1) {
+                            docLocation =
+                        docLocation + incompleteLocation.locationInParagraph
+                        }
+                    }
+                }
+                par = par + 1
             }
-            this.locationInParagraph = this.location
+            this.setLocation({location: docLocation})
         }
+        
+        
+
         return this
     }
 
@@ -126,20 +164,16 @@ class Document {
     }
 
     cursorLeft(): this {
-        this._getLocation()
-        if (this.location !== 0) {
-            this.location = this.location - 1
+        if (this.location !== -1) {
+            this.setLocation({location: this.location - 1})
         }
-        this._getLocation()
         return this
     }
 
     cursorRight(): this {
-        this._getLocation()
-        if (this.location !== this.allText.length) {
-            this.location = this.location + 1
+        if (this.location !== this.allText.length + 1) {
+            this.setLocation({location: this.location + 1})
         }
-        this._getLocation()
         return this
     }
 
@@ -149,7 +183,6 @@ class Document {
     }
 
     keyStroke(key: string): this {
-        this._getLocation()
         if (!this.selection) {
             this.document[this.paragraphIndex].content = insert(
                 this.document[this.paragraphIndex].content.split(''),
@@ -173,7 +206,6 @@ class Document {
     }
 
     newLine(): this {
-        this._getLocation()
         if (
             this.locationInParagraph <=
       this.document[this.paragraphIndex].content.length
@@ -200,17 +232,14 @@ class Document {
                 newLine: true,
             }) as Paragraph[]
 
-            this.location = this.location + 1
+            this.setLocation({location: this.location + 1})
             this.locationInParagraph = 0
-            this._getLocation()
         }
 
         return this
     }
 
     style(style: Style, styleCSS?: string): this {
-        this._getLocation()
-
         if (
             this.locationInParagraph <
         this.document[this.paragraphIndex].content.length ||
@@ -248,55 +277,52 @@ class Document {
             this.document[this.paragraphIndex].style = style
         }
 
-        // this._getLocation()
-
         return this
     }
 
     delete(): this {
-        this._getLocation()
-        if (this.allText !== '') {
-            if (this.selection) {
-                this.document[this.paragraphIndex].content =
-          removeRange(
-              this.document[this.paragraphIndex].content.split(''),
-              this.selection[0],
-              this.selection[1]
-          ).join('') || ''
-            } else if (this.locationInParagraph === 0) {
-                this.document[this.paragraphIndex - 2].content =
-          this.document[this.paragraphIndex - 2].content +
-          this.document[this.paragraphIndex].content
-                this.document = remove(
-                    this.document,
-                    this.paragraphIndex - 1
-                ) as Paragraph[]
-                this.document = remove(
-                    this.document,
-                    this.paragraphIndex
-                ) as Paragraph[]
-                this.document = remove(
-                    this.document,
-                    this.paragraphIndex - 1
-                ) as Paragraph[]
-                this.paragraphIndex = this.paragraphIndex - 2
-                this._getLocation()
-            } else {
-                this.document[this.paragraphIndex].content =
-          remove(
-              this.document[this.paragraphIndex].content.split(''),
-              this.locationInParagraph - 1
-          ).join('') || ''
-            }
-            this.allText = this.document.map((p) => p.content).join('')
-            this.location = this.location - 1
-            if (this.selection) {
-                this.location = this.selection[0]
-                this._getLocation()
-                this.selection = undefined
-            }
-        }
-        this._getLocation()
+        // if (this.allText !== '') {
+        //     if (this.selection) {
+        //         this.document[this.paragraphIndex].content =
+        //   removeRange(
+        //       this.document[this.paragraphIndex].content.split(''),
+        //       this.selection[0],
+        //       this.selection[1]
+        //   ).join('') || ''
+        //     } else if (this.locationInParagraph === 0) {
+        //         this.document[this.paragraphIndex - 2].content =
+        //   this.document[this.paragraphIndex - 2].content +
+        //   this.document[this.paragraphIndex].content
+
+        //         this.document = remove(
+        //             this.document,
+        //             this.paragraphIndex - 1
+        //         ) as Paragraph[]
+
+        //         this.document = remove(
+        //             this.document,
+        //             this.paragraphIndex
+        //         ) as Paragraph[]
+
+        //         this.document = remove(
+        //             this.document,
+        //             this.paragraphIndex - 1
+        //         ) as Paragraph[]
+
+        //         this.paragraphIndex = this.paragraphIndex - 2
+        //     } else {
+        //         this.document[this.paragraphIndex].content =
+        //             remove(
+        //                 this.document[this.paragraphIndex].content.split(''),
+        //                 this.locationInParagraph - 1
+        //             ).join('') || ''
+        //     }
+        //     this.setLocation({location: this.location - 1})
+        //     if (this.selection) {
+        //         this.setLocation({location: this.selection[0]})
+        //         this.selection = undefined
+        //     }
+        // }
         return this
     }
 }
