@@ -1,48 +1,29 @@
-import { AppBar, Container, Paper } from '@mui/material'
-import { useTheme } from '@mui/system'
-import React from 'react'
+import React, { useContext } from 'react'
+import { AppState } from '../../AppState'
 import Header from './Header'
 import TE from './TE'
-import ToolbarBottom from './TEToolbarBottom'
-import ToolbarTop from './TEToolbarTop'
 import useKeyPress from './useKeyPress'
 
 const TextEditor = () => {
-    const theme = useTheme()
+    const {get} = useContext(AppState)
     useKeyPress()
     
     return (
-        <div>
-            <AppBar
-                position='static'
-                variant='outlined'
-                elevation={0}
-                style={{
-                    background: (theme.palette.mode === 'dark') ? '#202020' :  '#f5F5F5',
-                    borderBottom: `2px solid ${theme.palette.primary.main}`,
-                    display: 'block',
-                    minWidth: '40rem'
-                }}
-            >
-                <span
-                    style={{
-                        height: '3rem',
-                        display: 'flex',
-                    }}
-                >
-                    <Header />
-                    <div style={{flexGrow: 1}}/>
-                    <ToolbarTop />
-                    
-                </span>
-                <ToolbarBottom />
-            </AppBar>
-            <div>
-                <Container style={{width: '650px'}}>
-                    <Paper className='page'>
+        <div
+            style={{
+                background: get('darkMode') ? '#202020' : '#f5F5F5',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+            }}
+        >
+            <Header/>
+            <div style={{ overflow: 'scroll' }}>
+                <div style={{ width: 'calc(5.1*125px)', height: 'calc(7*125px)', margin: 'auto', marginBottom: '3rem' }}>
+                    <div className="page">
                         <TE />
-                    </Paper>
-                </Container>
+                    </div>
+                </div>
             </div>
         </div>
     )   

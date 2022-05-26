@@ -1,4 +1,3 @@
-import { Button, ButtonGroup, Typography } from '@mui/material'
 import React from 'react'
 
 export default function ToolbarBottom() {
@@ -14,52 +13,34 @@ export default function ToolbarBottom() {
             }}
         >
             <span
-                style={{
-                    display: 'block',
-                    height: 'min-content',
-                    marginRight: '0.75rem',
-                }}
+                className="btn"
             >
-                <Typography style={{ fontSize: '1rem', fontWeight: 700 }}>
-              B
-                </Typography>
+                <span className='font-bold'>
+            B
+                </span>
             </span>
             <span
-                style={{
-                    display: 'block',
-                    height: 'min-content',
-                    marginRight: '0.75rem',
-                }}
+                className="btn"
             >
-                <Typography
-                    style={{ fontSize: '1rem', textDecoration: 'underline' }}
-                >
-              U
-                </Typography>
+                <span style={{ fontSize: '1rem', textDecoration: 'underline' }}>
+            U
+                </span>
             </span>
             <span
-                style={{
-                    display: 'block',
-                    height: 'min-content',
-                    marginRight: '0.75rem',
-                }}
+                className="btn"
             >
-                <Typography style={{ fontSize: '1rem' }}>
+                <span style={{ fontSize: '1rem' }}>
                     <em>I</em>
-                </Typography>
+                </span>
             </span>
             <span
-                style={{
-                    display: 'block',
-                    height: 'min-content',
-                    marginRight: '0.75rem',
-                }}
+                className="btn"
             >
-                <Typography
+                <span
                     style={{ fontSize: '1rem', textDecoration: 'line-through' }}
                 >
-              S
-                </Typography>
+            S
+                </span>
             </span>
         </span>
     )

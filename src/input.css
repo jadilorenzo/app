@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply mr-3 hover:border-b-green-600 border-b-2 border-b-transparent w-4 text-center;
+}
+
+.btn-active {
+    @apply border-b-green-600;
+}
+
+.header-logo-notch {
+    @apply inline-flex justify-center content-center;
+}
+
+.page {
+    @apply mt-10 p-20 bg-white h-full hover:border-gray-200 border;
+}
+
+.page > * {
+    color: black;
+    font-family: Helvetica, sans-serif;
+}
+
+.newline {
+    content: "\A";
+    white-space: pre;
+    display: block;
+}

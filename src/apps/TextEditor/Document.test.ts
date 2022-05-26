@@ -85,52 +85,59 @@ describe('Document', () => {
         ).toBe('ad')
     })
 
-    // test('creates new line', () => {
-    //     const doc = new Document()
-    //     const newDoc = doc.keyStroke('a').keyStroke('b').cursorLeft().newLine()
-    //     expect(newDoc.document[0].content).toBe('a')
-    //     expect(newDoc.document[1].newLine).toBe(true)
-    //     expect(newDoc.document[2].content).toBe('b')
-    //     expect(newDoc.document).toHaveLength(3)
-    // })
+    test('creates new line', () => {
+        const doc = new Document()
+        const newDoc = doc.keyStroke('a').keyStroke('b').cursorLeft().newLine()
+        expect(newDoc.document[0].content).toBe('a')
+        expect(newDoc.document[1].newLine).toBe(true)
+        expect(newDoc.document[2].content).toBe('b')
+        expect(newDoc.document).toHaveLength(3)
+    })
 
-    // test('moves between lines line', () => {
-    //     const doc = new Document()
-    //     let newDoc = doc.keyStroke('a')
-    //     newDoc = newDoc.keyStroke('b')
-    //     newDoc = newDoc.cursorLeft()
-    //     newDoc = newDoc.newLine()
-    //     newDoc = newDoc.cursorRight()
-    //     newDoc = newDoc.cursorRight()
-    //     expect(newDoc.paragraphIndex).toBe(2)
-    //     expect(newDoc.document).toHaveLength(3)
-    //     expect(newDoc.document[0].content).toBe('a')
-    //     expect(newDoc.document[1].newLine).toBe(true)
-    //     expect(newDoc.document[2].content).toBe('b')
+    test('has correct location in paragraph with single paragraph', () => {
+        const doc = new Document()
+        const newDoc = doc
+            .keyStroke('a')
+            .keyStroke('b')
+            .keyStroke('c')
+            .cursorLeft()
+        expect(newDoc.locationInParagraph).toBe(newDoc.location)
+    })
+
+    test('moves between lines line', () => {
+        const doc = new Document()
+        let newDoc = doc.keyStroke('a') // 1 1
+        newDoc = newDoc.keyStroke('b')  // 2 2
+        newDoc = newDoc.cursorLeft()    // 1 1
+        newDoc = newDoc.newLine()       // 0 1
+        newDoc = newDoc.cursorRight()   // 1 2
+        // newDoc = newDoc.cursorRight()   // 2 2
+        expect(newDoc.paragraphIndex).toBe(2)
+        expect(newDoc.document).toHaveLength(3)
+        expect(newDoc.locationInParagraph).toBe(2)
+        expect(newDoc.document[0].content).toBe('a')
+        expect(newDoc.document[1].newLine).toBe(true)
+        expect(newDoc.document[2].content).toBe('b')
         
-    // })
-
-    // test('has correct location in paragraph with single paragraph', () => {
-    //     const doc = new Document()
-    //     const newDoc = doc
-    //         .keyStroke('a')
-    //         .keyStroke('b')
-    //         .keyStroke('c')
-    //         .cursorLeft()
-    //     expect(newDoc.locationInParagraph).toBe(newDoc.location)
-    // })
+    })
 
     // test('has correct location in paragraph with multiple paragraphs', () => {
+    //     console.log(
+    //         'has correct location in paragraph with multiple paragraphs'
+    //     )
     //     const doc = new Document()
-    //     const newDoc = doc
-    //         .keyStroke('a') // 0
-    //         .keyStroke('b') // 1
-    //         .keyStroke('c') // 2
-    //         .keyStroke('d') // 3
-    //         .cursorLeft()   // 2
-    //         .cursorLeft()   // 1
-    //         .newLine()      // 0
-    //         .cursorRight()  // 1
+    //     console.log({location: doc.location, locationInParagraph: doc.locationInParagraph})
+    //     let newDoc = doc    // 0 0
+    //         .keyStroke('a') // 1 1
+    //         .keyStroke('b') // 2 2
+    //         .keyStroke('c') // 3 3
+    //         .keyStroke('d') // 4 4
+    //         .cursorLeft()   // 3 3
+    //         .newLine()      // 0 3
+    //         // .cursorRight()  // 1
+    //     expect(newDoc.paragraphIndex).toBe(2)
+    //     expect(newDoc.locationInParagraph).toBe(0)
+    //     newDoc = newDoc.cursorRight()
     //     expect(newDoc.locationInParagraph).toBe(1)
     // })
 
