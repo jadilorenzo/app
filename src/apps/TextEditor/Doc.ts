@@ -70,6 +70,12 @@ const remove = (arr: unknown[], index: number) => [
     ...arr.slice(index + 1),
 ]
 
+const insert = (arr: unknown[], index: number, element: unknown) => [
+    ...arr.slice(0, index),
+    element,
+    ...arr.slice(index),
+]
+
 class Document {
     location: CursorLocation
     activeTextStyle:
@@ -134,14 +140,17 @@ class Document {
     }
 
     keyStroke(key: string): this {
-        if (key.length !== 1) {
+        if (key.split('').length !== 1) {
             throw new Error(`Single key expected. Received "${key}"`)
         }
 
-        this._setDocument([
-            ...this.document,
-            { type: 'text', char: key, id: uuidv4() },
-        ])
+        this._setDocument(
+            insert(
+                this.document, 
+                this.elementIndexAtLocation(this.location), 
+                { type: 'text', char: key, id: uuidv4() }
+            ) as Element[]
+        )
         this.cursorRight()
         return this
     }

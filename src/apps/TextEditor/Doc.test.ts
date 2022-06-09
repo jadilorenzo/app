@@ -36,6 +36,17 @@ test('deletes and moves cursor back left', () => {
     expect(doc.text).toEqual('hell')
 })
 
+test('inserts and with moved cursor', () => {
+    const doc = new Document()
+
+    'hello'.split('').forEach((char) => doc.keyStroke(char))
+    doc.location = {x:3, y:0}
+    doc.keyStroke('x')
+
+    expect(doc.text).toEqual('helxlo')
+})
+
+
 test('moves cursor with newline', () => {
     const doc = new Document()
     const firstLine = 'hello'
