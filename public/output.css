@@ -479,6 +479,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-bottom-color: rgb(22 163 74 / var(--tw-border-opacity));
 }
 
+.btn {
+  font-family: 'Dosis';
+}
+
 .btn-active {
   --tw-border-opacity: 1;
   border-bottom-color: rgb(22 163 74 / var(--tw-border-opacity));

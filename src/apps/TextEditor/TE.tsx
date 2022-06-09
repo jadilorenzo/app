@@ -1,17 +1,17 @@
 import React from 'react'
 import useAppState from '../../useAppState'
-import Document from './Document'
+import Doc from './Doc'
 import Line from './TELine'
 
 export default function TE() {
     const {get} = useAppState()
-    const doc: Document = get('TEXT_EDITOR_DOCUMENT') as Document
+    const doc: Doc = get('TEXT_EDITOR_DOCUMENT') as Doc
 
     return (
         <div style={{wordWrap: 'break-word', width: '100%'}}>
-            {doc.document.map((p, i) => p.newLine ? null : (
+            {doc.lines.map((line, i) => (
                 <div key={i}>
-                    <Line p={p} i={i} />
+                    <Line indexY={i} line={line} />
                 </div>
             ))}
         </div>

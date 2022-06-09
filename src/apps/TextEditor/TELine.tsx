@@ -1,16 +1,21 @@
 import React from 'react'
-import { Paragraph } from './Document'
+import { Element } from './Doc'
 import Char from './TEChar'
 
-const Line = ({i, p}: {i: number, p: Paragraph}): JSX.Element => {
-
+const Line = ({indexY, line}: {indexY: number, line: Element[]}): JSX.Element => {
     return (
-        <span key={i} style={{ height: '2rem' }}>
-            {p.content.split('').map((char, index) => (
-                <span key={index}>
-                    <Char char={char} index={index} parIndex={i} />
-                </span>
-            ))}
+        <span key={indexY} style={{ height: '2rem' }}>
+            {line.map((char, indexX) =>
+                char.type === 'text' ? (
+                    <span key={indexX}>
+                        <Char
+                            char={char.char}
+                            id={char.id}
+                            location={{ x: indexX, y: indexY }}
+                        />
+                    </span>
+                ) : null
+            )}
         </span>
     )
 }

@@ -58,7 +58,7 @@ interface BlockElement {
   id: string;
 }
 
-type Element = NewlineElement | TextElement | BlockElement;
+export type Element = NewlineElement | TextElement | BlockElement;
 
 export interface CursorLocation {
   x: number;

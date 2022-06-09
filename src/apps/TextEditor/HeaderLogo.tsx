@@ -1,7 +1,6 @@
 import React from 'react'
-import Logo from './Logos/Logo24.png'
+import Logo from './Logos/Logo25.png'
 import HeaderLogoNotch from './HeaderLogoNotch'
-import { lineHeight } from '@mui/system'
 
 export default function HeaderLogo() {
     return (
@@ -9,23 +8,23 @@ export default function HeaderLogo() {
             <img
                 src={Logo}
                 style={{
-                    height: '1.8rem',
-                    margin: '0.5rem 0 0.5rem 0',
+                    height: '1.25rem',
+                    marginTop: '0.85rem',
+                    marginBottom: '0.85rem'
                 }}
             />
             <div className='flex items-center justify-center m-1'>
                 <h2 className='ml-1 text-lg'>
-                    <span style={{ fontWeight: 400 }}>Power</span>
+                    <span style={{ fontWeight: 400 }}>Forward Tech</span>
                 </h2>
                 <span
                     className='ml-3 mt-1 uppercase text-gray-600'
                     style={{
-                        fontFamily: 'Helvetica',
-                        fontSize: '0.25rem',
-                        lineHeight: '0.25rem'
+                        fontFamily: 'Dosis',
+                        fontSize: '.75rem',
                     }}
                 >
-            Text Editor
+            Text/Math Editor
                 </span>
             </div>
         </HeaderLogoNotch>

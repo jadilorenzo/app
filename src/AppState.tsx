@@ -44,22 +44,7 @@ export const AppStateProvider = ({children}: {
                     padding: '0.5rem',
                 }}
             >
-                <div>
-            Document:{' '}
-                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.document.map(p => p.content), null, 4)}
-                </div>
-                <div>
-            Location:{' '}
-                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.location, null, 4)}
-                </div>
-                <div>
-            Location In Paragraph:{' '}
-                    {state.TEXT_EDITOR_DOCUMENT.locationInParagraph}
-                </div>
-                <div>
-            Paragraph Location:{' '}
-                    {JSON.stringify(state.TEXT_EDITOR_DOCUMENT.paragraphIndex, null, 4)}
-                </div>
+           
             </div>
             {children}
         </AppState.Provider>

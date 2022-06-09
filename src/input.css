@@ -4,6 +4,7 @@
 
 .btn {
     @apply mr-3 hover:border-b-green-600 border-b-2 border-b-transparent w-4 text-center;
+    font-family: 'Dosis';
 }
 
 .btn-active {

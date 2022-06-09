@@ -1,16 +1,16 @@
 import { useContext, useEffect } from 'react'
 import { AppState } from '../../AppState'
 import useTextEditorActions from './useTextEditorActions'
-import Document from './Document'
+import Doc from './Doc'
 
 const useKeyPress = () => {
     const act = useTextEditorActions()
     const {get} = useContext(AppState)
 
     useEffect(() => {
-        const doc = get('TEXT_EDITOR_DOCUMENT') as Document
+        const doc = get('TEXT_EDITOR_DOCUMENT') as Doc
 
-        if (doc.allText === '') {
+        if (doc.text === '') {
             'Start Typing... '.split('').map((char) => {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
             })
