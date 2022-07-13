@@ -126,7 +126,7 @@ class Document {
                 lines.push(currentLine)
                 currentLine = []
             } else {
-                if (element.type !=='eof') currentLine.push(element)
+                if (element.type !== 'eof') currentLine.push(element)
             }
         }
 
@@ -145,7 +145,7 @@ class Document {
     }
 
     addEOF() {
-        // add eof 
+        // add eof
         this._setDocument(
             insert(this.document, this.document.length, {
                 type: 'eof',
@@ -275,6 +275,20 @@ class Document {
         }
 
         return index
+    }
+
+    locationFromId(id: string): CursorLocation | undefined {
+        let location
+        
+        for (let y = 0; y < this.lines.length; y++) {
+            for (let x = 0; x < this.lines[y].length; x++) {
+                if (this.lines[y][x].id === id) {
+                    location = {x, y} as CursorLocation
+                }
+            }
+        }
+
+        return location
     }
 
     select(selection: [CursorLocation, CursorLocation]): this {

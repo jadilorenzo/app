@@ -194,3 +194,11 @@ test('adds EOF automatically', () => {
 
     expect(doc.document[doc.document.length-1].type).toBe('eof')
 })
+
+test('location of element from uuid', () => {
+    const doc = new Document()
+
+    'abc'.split('').forEach((char) => doc.keyStroke(char))
+
+    expect(doc.locationFromId(doc.document[1].id)).toEqual({x: 1, y: 0})
+})
