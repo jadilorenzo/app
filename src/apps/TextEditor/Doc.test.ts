@@ -80,7 +80,7 @@ test('elementIndexAtLocation', () => {
     // Invalid location
     expect(() => doc.elementIndexAtLocation({ x: 7, y: 0})).toThrowError()
     expect(() => doc.elementIndexAtLocation({ x: 0, y: 2})).toThrowError()
-    expect(() => doc.elementIndexAtLocation({ x: 6, y: 1})).toThrowError()
+    expect(() => doc.elementIndexAtLocation({ x: 7, y: 1})).toThrowError()
 })
 
 test('selects text and catches invalid selection', () => {
@@ -100,34 +100,7 @@ test('selects text and catches invalid selection', () => {
     expect(() =>
         doc.select([
             { x: 0, y: 0 },
-            { x: 6, y: 0 },
-        ])
-    ).toThrowError()
-    expect(() =>
-        doc.select([
-            { x: 0, y: 0 },
-            { x: 0, y: 1 },
-        ])
-    ).toThrowError()
-})
-
-test('selects text and catches invalid selection', () => {
-    const doc = new Document()
-    const selection: [CursorLocation, CursorLocation] = [
-        { x: 0, y: 0 },
-        { x: 1, y: 0 },
-    ]
-
-    'hello'.split('').forEach((char) => doc.keyStroke(char))
-    doc.select(selection)
-
-    expect(doc.selection).toEqual(selection)
-
-    // Invalid location
-    expect(() =>
-        doc.select([
-            { x: 0, y: 0 },
-            { x: 6, y: 0 },
+            { x: 7, y: 0 },
         ])
     ).toThrowError()
     expect(() =>
@@ -163,7 +136,7 @@ test('moves selection back', () => {
 
     expect(doc.location).toEqual({ x: 1, y:0})
     expect(doc.text).toBe('hllo')
-    expect(doc.document.length).toBe(4)
+    expect(doc.document.length).toBe(5)
 })
 
 
@@ -179,7 +152,7 @@ test('deletes all characters in a selection', () => {
     doc.backspace()
 
     expect(doc.text).toBe('llo')
-    expect(doc.document.length).toBe(3)
+    expect(doc.document.length).toBe(4)
 })
 
 test('deletes selection over newline', () => {
@@ -199,5 +172,25 @@ test('deletes selection over newline', () => {
     doc.select(selection)
     doc.backspace()
 
-    expect(doc.document.length).toBe(7)
+    expect(doc.document.length).toBe(8)
+})
+
+test('adds EOF', () => {
+    const doc = new Document()
+    
+    doc._setDocument([])
+    doc.addEOF()
+
+    expect(doc.document[0].type).toBe('eof')
+})
+
+test('adds EOF automatically', () => {
+    const doc = new Document()
+
+    'abd'.split('').forEach((char) => doc.keyStroke(char))
+    doc.cursorLeft()
+    doc.keyStroke('c')
+
+
+    expect(doc.document[doc.document.length-1].type).toBe('eof')
 })

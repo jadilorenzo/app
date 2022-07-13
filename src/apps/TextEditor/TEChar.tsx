@@ -16,6 +16,8 @@ const Char = ({char, location, id}: {
     const doc: Doc = get('TEXT_EDITOR_DOCUMENT') as Doc
     const selecting: boolean = doc.selection !== undefined
 
+    console.log(doc.elementIndexAtLocation(location), doc.document.length)
+
     return (
         <span key={JSON.stringify(location)} style={{ height: '1.2rem' }}>
             {doc.location.x === location.x && doc.location.y === location.y ? (
@@ -47,6 +49,17 @@ const Char = ({char, location, id}: {
                     <span style={{ whiteSpace: 'pre-wrap' }}> </span>
                 )}
             </span>
+            {/* {doc.elementIndexAtLocation(location) === doc.document.length ? (
+                <div
+                    style={{
+                        width: '0',
+                        display: 'inline',
+                        background: selecting ? '#e1efff' : undefined,
+                    }}
+                >
+                    <Cursor />
+                </div>
+            ) : null} */}
         </span>
     )
 }

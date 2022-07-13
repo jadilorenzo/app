@@ -58,7 +58,12 @@ interface BlockElement {
   id: string;
 }
 
-export type Element = NewlineElement | TextElement | BlockElement;
+interface EOFElement {
+    type: 'eof'
+    id: string
+}
+
+export type Element = NewlineElement | TextElement | BlockElement | EOFElement;
 
 export interface CursorLocation {
   x: number;
@@ -93,7 +98,7 @@ class Document {
         this.location = { x: 0, y: 0 }
         this.activeTextStyle = 'none'
         this.activeBlockStyle = 'none'
-        this.document = [] // exampleData.document
+        this.document = [{ type: 'eof', id: uuidv4() }]
         this.selection = undefined
     }
 
@@ -121,7 +126,7 @@ class Document {
                 lines.push(currentLine)
                 currentLine = []
             } else {
-                currentLine.push(element)
+                if (element.type !=='eof') currentLine.push(element)
             }
         }
 
@@ -139,19 +144,46 @@ class Document {
         this.document = document
     }
 
+    addEOF() {
+        // add eof 
+        this._setDocument(
+            insert(this.document, this.document.length, {
+                type: 'eof',
+                id: uuidv4(),
+            }) as Element[]
+        )
+        return this
+    }
+
+    removeEOF() {
+        // remove eof
+        const eofIndex = this.document
+            .map((element) => element.type === 'eof')
+            .indexOf(true)
+
+        this._setDocument(remove(this.document, eofIndex) as Element[])
+
+        return this
+    }
+
     keyStroke(key: string): this {
         if (key.split('').length !== 1) {
             throw new Error(`Single key expected. Received "${key}"`)
         }
 
+        this.removeEOF()
+
         this._setDocument(
-            insert(
-                this.document, 
-                this.elementIndexAtLocation(this.location), 
-                { type: 'text', char: key, id: uuidv4() }
-            ) as Element[]
+            insert(this.document, this.elementIndexAtLocation(this.location), {
+                type: 'text',
+                char: key,
+                id: uuidv4(),
+            }) as Element[]
         )
         this.cursorRight()
+
+        this.addEOF()
+
         return this
     }
 
@@ -186,7 +218,7 @@ class Document {
                     deltaXLeft = 0
                 } else {
                     newY -= 1
-                    newX = lines[newY].length 
+                    newX = lines[newY].length
                     deltaXLeft -= lineRemainder + 1
                     lineRemainder = lines[newY].length
                 }
@@ -210,7 +242,12 @@ class Document {
     }
 
     newLine(): this {
-        this._setDocument([...this.document, { type: 'newline', id: uuidv4() }])
+        this._setDocument(
+      insert(this.document, this.elementIndexAtLocation(this.location), {
+          type: 'newline',
+          id: uuidv4(),
+      }) as Element[]
+        )
         this.cursorRight()
         return this
     }
@@ -260,14 +297,13 @@ class Document {
                 this.elementIndexAtLocation(this.location) - 1
             ) as Element[]
             this.cursorLeft()
-            
         } else {
             const selection = this.selection
-            this.location = {...selection[1], 'x': selection[1].x - selection[1].y } // calculate for the newline character
+            this.location = { ...selection[1], x: selection[1].x - selection[1].y } // calculate for the newline character
             this.selection = undefined
             while (
-                this.location.x !== selection[0].x  ||
-                this.location.y !== selection[0].y
+                this.location.x !== selection[0].x ||
+        this.location.y !== selection[0].y
             ) {
                 // console.log(this.text)
                 // console.log(selection, this.location)
@@ -284,36 +320,39 @@ class Document {
                     .map((element) => element.type === 'newline')
                     .includes(true)
             ) {
-                const newLineSelectionIndex = documentSelection.map(
-                    (element) => element.type === 'newline'
-                ).indexOf(true)
+                const newLineSelectionIndex = documentSelection
+                    .map((element) => element.type === 'newline')
+                    .indexOf(true)
 
-                const newLineSelectionIndexId = documentSelection[newLineSelectionIndex].id
+                const newLineSelectionIndexId =
+          documentSelection[newLineSelectionIndex].id
 
                 const newLineIndex = this.document
                     .map((element) => element.id === newLineSelectionIndexId)
                     .indexOf(true)
-                
+
                 this.document = remove(this.document, newLineIndex) as Element[]
             }
         }
         return this
     }
 
-    style(style: 'BOLD' | 'UNDERLINE' | 'STRIKETHROUH' | 'ITALICS' | string): this {
+    style(
+        style: 'BOLD' | 'UNDERLINE' | 'STRIKETHROUH' | 'ITALICS' | string
+    ): this {
         if (this.selection) {
             const startIndex = this.elementIndexAtLocation(this.selection[0])
             const endIndex = this.elementIndexAtLocation(this.selection[1])
             this.document = this.document.map((textElement, index) => {
                 if (index >= startIndex && index <= endIndex) {
-                    return {...textElement, style}
+                    return { ...textElement, style }
                 }
             }) as Element[]
         } else {
             throw new Error('No selection to style.')
         }
         return this
-    } 
+    }
 }
 
 export default Document
