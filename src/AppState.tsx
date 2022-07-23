@@ -44,7 +44,9 @@ export const AppStateProvider = ({children}: {
                     padding: '0.5rem',
                 }}
             >
-           
+                <code>{JSON.stringify(state.TEXT_EDITOR_DOCUMENT.location)}</code>
+                <br/>
+                <code>{JSON.stringify(state.TEXT_EDITOR_DOCUMENT.text)}</code>
             </div>
             {children}
         </AppState.Provider>

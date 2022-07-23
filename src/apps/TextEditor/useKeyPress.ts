@@ -11,10 +11,9 @@ const useKeyPress = () => {
         const doc = get('TEXT_EDITOR_DOCUMENT') as Doc
 
         if (doc.text === '') {
-            'Start Typing... '.split('').map((char) => {
+            'Start Typing...'.split('').map((char) => {
                 act('TEXT_EDITOR_DOCUMENT_KEY_PRESS', char)
             })
-            act('TEXT_EDITOR_DOCUMENT_CURSOR_LEFT')
         }
 
         document.addEventListener('keydown', ({ key }) => {

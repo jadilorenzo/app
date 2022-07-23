@@ -140,6 +140,34 @@ class Document {
         return lines
     }
 
+    get atEOF(): boolean {
+        if (this.document.length <= 1) {
+            return false
+        }
+
+        const lastLine = this.location.y === this.lines.length - 1
+        return (this.location.x === 0) && lastLine
+    }
+
+    get atEndOfLine(): boolean {
+        if (this.document.length <= 1) {
+            return false
+        }
+
+        const lengthOfLastLine = this.lines[this.location.y].length
+        const endOfLine = this.location.x === lengthOfLastLine
+        return endOfLine
+    }
+
+    get lengthOfLine(): number {
+        if (this.document.length <= 1) {
+            return 0
+        }
+
+        const lengthOfLine = this.lines[this.location.y].length
+        return lengthOfLine
+    }
+
     _setDocument(document: Element[]) {
         this.document = document
     }
@@ -207,6 +235,7 @@ class Document {
                     newX = 0
                     newY += 1
                     deltaXLeft -= lineRemainder + 1
+                    if (!lines[newY]) throw new Error('Location out of range.')
                     lineRemainder = lines[newY].length
                 }
             }
@@ -220,6 +249,7 @@ class Document {
                     newY -= 1
                     newX = lines[newY].length
                     deltaXLeft -= lineRemainder + 1
+                    if (!lines[newY]) throw new Error('Location out of range.')
                     lineRemainder = lines[newY].length
                 }
             }
@@ -277,8 +307,8 @@ class Document {
         return index
     }
 
-    locationFromId(id: string): CursorLocation | undefined {
-        let location
+    locationFromId(id: string): CursorLocation {
+        let location = {x:-1, y: 0}
         
         for (let y = 0; y < this.lines.length; y++) {
             for (let x = 0; x < this.lines[y].length; x++) {

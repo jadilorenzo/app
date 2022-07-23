@@ -1,22 +1,18 @@
 import React from 'react'
 import useAppState from '../../useAppState'
 import Doc from './Doc'
-import TEChar from './TEChar'
 import Cursor from './TECursor'
 
-export default function TE() {
-    const {get} = useAppState()
+export default function TENewLineElement({id}: {id: string}) {
+    const { get } = useAppState()
     const doc: Doc = get('TEXT_EDITOR_DOCUMENT') as Doc
     const selecting: boolean = doc.selection !== undefined
-    
+    const location = doc.locationFromId(id)
+
     return (
-        <div style={{ wordWrap: 'break-word', width: '100%' }}>
-            {doc.document.map((element) => (
-                <React.Fragment key={element.id}>
-                    <TEChar element={element} />
-                </React.Fragment>
-            ))}
-            {doc.atEOF ? (
+        <>
+            <br />
+            {doc.atEndOfLine && doc.location.y === location.y ? (
                 <div
                     style={{
                         width: '0',
@@ -27,6 +23,6 @@ export default function TE() {
                     <Cursor />
                 </div>
             ) : null}
-        </div>
+        </>
     )
 }
